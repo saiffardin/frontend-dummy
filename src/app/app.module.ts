@@ -14,9 +14,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { FsUiComponent } from './fs-ui/fs-ui.component';
 import { TabComponent } from './fs-ui/tab/tab.component';
+import { SidebarComponent } from './fs-ui/sidebar/sidebar.component';
 
 @NgModule({
-  declarations: [AppComponent, FsUiComponent, TabComponent],
+  declarations: [AppComponent, FsUiComponent, TabComponent, SidebarComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
