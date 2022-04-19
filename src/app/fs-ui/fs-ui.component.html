@@ -4,7 +4,7 @@
       This padding value depends on the mat-icon-button width. -->
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
         <!-- Files -->
-        <span>{{node.name}}</span>
+        <span (contextmenu)="onRightClick($event, {folder: false})">{{node.name}}</span>
     </mat-tree-node>
     <!-- This is the tree node template for expandable nodes -->
     <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
@@ -17,7 +17,7 @@
             </button>
 
             <!-- Folder Name -->
-            <span (contextmenu)="onRightClick($event, {content: ''})">{{node.name}}</span>
+            <span (contextmenu)="onRightClick($event, {folder: true})">{{node.name}}</span>
         </div>
         <!-- There is inline padding applied to this div using styles.
             This padding value depends on the mat-icon-button width.  -->
@@ -39,11 +39,10 @@
 <!-- standard material menu -->
 <mat-menu #rightMenu="matMenu">
     <ng-template matMenuContent let-item="item">
-        <button mat-menu-item>Create Folder</button>
-        <button mat-menu-item>Create SOP File</button>
-        <button mat-menu-item>Create Table File</button>
-        <button mat-menu-item>Delete Folder</button>
-        <button mat-menu-item>Rename Folder</button>
+        <button mat-menu-item *ngIf="item.folder">Create Folder</button>
+        <button mat-menu-item *ngIf="item.folder">Create SOP File</button>
+        <button mat-menu-item *ngIf="item.folder">Create Table File</button>
+        <button mat-menu-item>Delete</button>
+        <button mat-menu-item>Rename</button>
     </ng-template>
 </mat-menu>
-
