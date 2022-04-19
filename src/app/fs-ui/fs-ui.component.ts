@@ -44,6 +44,14 @@ export class FsUiComponent implements OnInit {
   hasChild = (_: number, node: FsNode) =>
     (!!node.children && node.children.length > 0) || node.isFolder;
 
+  private commonErrorHandler = (err: any) => {
+    
+    console.log('Error in File System Subscribe:', err.error);
+    console.error(err.error.message);
+    
+
+  };
+
   showChildren(e: any, node: FsNode) {
     // console.log('treeControl:', this.treeControl.isExpanded(node));
     // console.log('node size:', node?.children?.length);
@@ -66,10 +74,11 @@ export class FsUiComponent implements OnInit {
 
     // let { name,path } = node;
 
-    this.fileService.showChildrenAPI(node).subscribe((data: any) => {
-      //   console.log(data);
+    this.fileService.changeDirAPI(node).subscribe((data: any) => {
+      console.log('data:', data);
 
       this.fileService.cmdListApi().subscribe((res: any) => {
+        console.log('res:', res);
         // console.log(res.data);
 
         node.children = res.data.map((child: any) => {
@@ -111,7 +120,7 @@ export class FsUiComponent implements OnInit {
         this.dataSource.data = data;
 
         // console.log('this.dataSource:', this.dataSource.data);
-      });
-    });
+      },this.commonErrorHandler);
+    }, this.commonErrorHandler);
   }
 }
