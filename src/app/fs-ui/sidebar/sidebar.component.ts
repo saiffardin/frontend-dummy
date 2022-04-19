@@ -19,7 +19,7 @@ import { FsNode } from '../FsNode';
   ];
   */
 
-// test tree 
+// test tree
 const TREE_DATA: FsNode[] = [
   {
     name: 'root',

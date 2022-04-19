@@ -11,15 +11,15 @@ export class TabComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  tabs = ['First', 'Second', 'Third'];
+  tabs = ['First'];
   selected = new FormControl(0);
 
-  addTab(selectAfterAdding: boolean) {
-    this.tabs.push('New');
+  addTab(tabTitle?: string) {
+    // ekhane jei naam dibo she name tab create hobe
+    this.tabs.push(tabTitle!);
 
-    if (selectAfterAdding) {
-      this.selected.setValue(this.tabs.length - 1);
-    }
+    //whenever a new tab is created, go to that tab
+    this.selected.setValue(this.tabs.length - 1);
   }
 
   removeTab(index: number) {
