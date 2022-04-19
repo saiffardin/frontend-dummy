@@ -187,4 +187,8 @@ export class FsUiComponent implements OnInit {
       // call delete api here
     }, this.commonErrorHandler);
   }
+
+  clickedFiles(event: any, node: FsNode) {
+    console.log(node);
+  }
 }
