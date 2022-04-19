@@ -45,11 +45,8 @@ export class FsUiComponent implements OnInit {
     (!!node.children && node.children.length > 0) || node.isFolder;
 
   private commonErrorHandler = (err: any) => {
-    
     console.log('Error in File System Subscribe:', err.error);
     console.error(err.error.message);
-    
-
   };
 
   showChildren(e: any, node: FsNode) {
@@ -62,7 +59,7 @@ export class FsUiComponent implements OnInit {
 
     /**
      * it will preserve the state of the tree,
-     *  when it's reopened
+     * when it's reopened
      * after closing the tree once
      */
     if (
@@ -83,9 +80,9 @@ export class FsUiComponent implements OnInit {
 
         node.children = res.data.map((child: any) => {
           /*
-                path;
-                children;
-                isFolder?: boolean;
+            path;
+            children;
+            isFolder?: boolean;
             */
 
           let path: string = `${node.path}/${node.name}`;
@@ -120,7 +117,7 @@ export class FsUiComponent implements OnInit {
         this.dataSource.data = data;
 
         // console.log('this.dataSource:', this.dataSource.data);
-      },this.commonErrorHandler);
+      }, this.commonErrorHandler);
     }, this.commonErrorHandler);
   }
 }
