@@ -1,5 +1,6 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { FsUiService } from './fs-ui.service';
 
@@ -31,24 +32,37 @@ const TREE_DATA: FsNode[] = [
   styleUrls: ['./fs-ui.component.css'],
 })
 export class FsUiComponent implements OnInit {
-  ngOnInit(): void {}
-
-  treeControl = new NestedTreeControl<FsNode>((node) => node.children);
-
-  dataSource = new MatTreeNestedDataSource<FsNode>();
-
   constructor(private fileService: FsUiService) {
     this.dataSource.data = TREE_DATA;
   }
 
+  ngOnInit(): void {}
+
+  // these objects are created for mat-tree
+  treeControl = new NestedTreeControl<FsNode>((node) => node.children);
+  dataSource = new MatTreeNestedDataSource<FsNode>();
+
+  // rc - we create an object that contains coordinates
+  menuTopLeftPosition = { x: 0, y: 0 };
+
+  // rc - reference to the MatMenuTrigger in the DOM
+  @ViewChild(MatMenuTrigger, { static: true }) matMenuTrigger!: MatMenuTrigger;
+
+  //  mat-tree
   hasChild = (_: number, node: FsNode) =>
     (!!node.children && node.children.length > 0) || node.isFolder;
 
+  // handle api subscribe error
   private commonErrorHandler = (err: any) => {
     console.log('Error in File System Subscribe:', err.error);
     console.error(err.error.message);
   };
 
+  /**
+   * 'showChildren' method is called when
+   * the user clicks the 'left-side-icon' of any folder on the sidebar
+   * @param node is the tree-node thats been clicked
+   */
   showChildren(e: any, node: FsNode) {
     // console.log('treeControl:', this.treeControl.isExpanded(node));
     // console.log('node size:', node?.children?.length);
@@ -119,5 +133,27 @@ export class FsUiComponent implements OnInit {
         // console.log('this.dataSource:', this.dataSource.data);
       }, this.commonErrorHandler);
     }, this.commonErrorHandler);
+  }
+
+  /**
+   * 'onRightClick' method called when
+   * the user click with the right button
+   * @param event MouseEvent, it contains the coordinates
+   * @param item Our data contained in the row of the table
+   */
+  onRightClick(event: MouseEvent, item?: any) {
+    // preventDefault avoids to show the visualization of the right-click menu of the browser
+    event.preventDefault();
+
+    // we record the mouse position in our object
+    this.menuTopLeftPosition.x = event.clientX;
+    this.menuTopLeftPosition.y = event.clientY;
+
+    // we open the menu
+    // we pass to the menu the information about our object
+    this.matMenuTrigger.menuData = { item: item };
+
+    // we open the menu
+    this.matMenuTrigger.openMenu();
   }
 }

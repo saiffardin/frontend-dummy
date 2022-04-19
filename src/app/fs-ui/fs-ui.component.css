@@ -35,3 +35,7 @@
 	cursor: pointer;
 	outline: inherit;
 }
+
+.mat-tree-node span{
+    cursor: help;
+}
