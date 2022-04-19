@@ -156,4 +156,12 @@ export class FsUiComponent implements OnInit {
     // we open the menu
     this.matMenuTrigger.openMenu();
   }
+
+  clickedContextMenuItem(event: any, node: FsNode, command: string) {
+    // console.log(event);
+    console.log(node);
+    console.log('command: ', command);
+    console.log('--------------------------');
+    // rename er api er command a 'ls' dewa
+  }
 }

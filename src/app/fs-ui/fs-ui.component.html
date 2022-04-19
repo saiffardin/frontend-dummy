@@ -4,7 +4,7 @@
       This padding value depends on the mat-icon-button width. -->
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
         <!-- Files -->
-        <span (contextmenu)="onRightClick($event, {folder: false})">{{node.name}}</span>
+        <span (contextmenu)="onRightClick($event, {folder: false, node})">{{node.name}}</span>
     </mat-tree-node>
     <!-- This is the tree node template for expandable nodes -->
     <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
@@ -17,7 +17,7 @@
             </button>
 
             <!-- Folder Name -->
-            <span (contextmenu)="onRightClick($event, {folder: true})">{{node.name}}</span>
+            <span (contextmenu)="onRightClick($event, {folder: true, node})">{{node.name}}</span>
         </div>
         <!-- There is inline padding applied to this div using styles.
             This padding value depends on the mat-icon-button width.  -->
@@ -39,10 +39,11 @@
 <!-- standard material menu -->
 <mat-menu #rightMenu="matMenu">
     <ng-template matMenuContent let-item="item">
-        <button mat-menu-item *ngIf="item.folder">Create Folder</button>
-        <button mat-menu-item *ngIf="item.folder">Create SOP File</button>
-        <button mat-menu-item *ngIf="item.folder">Create Table File</button>
-        <button mat-menu-item>Delete</button>
-        <button mat-menu-item>Rename</button>
+        <button mat-menu-item *ngIf="item.folder" (click)="clickedContextMenuItem($event,item.node,'mkdir')">Create Folder</button>
+        <button mat-menu-item *ngIf="item.folder" (click)="clickedContextMenuItem($event,item.node,'mkspf')">Create SOP File</button>
+        <button mat-menu-item *ngIf="item.folder" (click)="clickedContextMenuItem($event,item.node,'mktbl')">Create Table File</button>
+
+        <button mat-menu-item (click)="clickedContextMenuItem($event,item.node,'rm')">Delete</button>
+        <button mat-menu-item (click)="clickedContextMenuItem($event,item.node,'ls')">Rename</button>
     </ng-template>
 </mat-menu>
