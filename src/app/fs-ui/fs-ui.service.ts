@@ -6,18 +6,24 @@ import { FsNode } from './fs-ui.component';
 @Injectable({
   providedIn: 'root',
 })
-
 export class FsUiService {
   constructor(private http: HttpClient) {}
 
   // cmd: cd
   changeDirAPI(node: FsNode): Observable<FsNode> | any {
     let nodeName = node.name;
+    let extension = node.extension;
+    let path = '';
+
     console.log('node:', node);
 
     const url = `http://192.168.100.37:8080/fs`;
 
-    let path = nodeName === 'root' ? './' : `${node.path}/${nodeName}`;
+    if (extension === '.dir') {
+      path = nodeName === 'root' ? './' : `${node.path}/${nodeName}`;
+    } else {
+        path = node.path!;
+    }
 
     console.log('path:', path);
 

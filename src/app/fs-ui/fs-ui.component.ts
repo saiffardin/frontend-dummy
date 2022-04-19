@@ -1,6 +1,7 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { FsUiService } from './fs-ui.service';
 
@@ -32,7 +33,10 @@ const TREE_DATA: FsNode[] = [
   styleUrls: ['./fs-ui.component.css'],
 })
 export class FsUiComponent implements OnInit {
-  constructor(private fileService: FsUiService) {
+  constructor(
+    private fileService: FsUiService,
+    private _snackBar: MatSnackBar
+  ) {
     this.dataSource.data = TREE_DATA;
   }
 
@@ -163,5 +167,24 @@ export class FsUiComponent implements OnInit {
     console.log('command: ', command);
     console.log('--------------------------');
     // rename er api er command a 'ls' dewa
+
+    const { children, extension, isFolder, name, path } = node;
+
+    if ((command === 'rm' || command === 'ls') && name === 'root') {
+      let action = command === 'rm' ? 'delete' : 'rename';
+      let message = `Can't ${action} the root folder`;
+      console.log(message);
+      this._snackBar.open(message, 'STOP');
+
+      return;
+    }
+
+    // do cd first
+    // then delete the file
+
+    this.fileService.changeDirAPI(node).subscribe((data: any) => {
+      console.log('cd:', data);
+      // call delete api here
+    }, this.commonErrorHandler);
   }
 }
