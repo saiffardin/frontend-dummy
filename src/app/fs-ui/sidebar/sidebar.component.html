@@ -1,1 +1,59 @@
-<p>sidebar works!</p>
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+    <!-- This is the tree node template for leaf nodes -->
+    <!-- There is inline padding applied to this node using styles.
+      This padding value depends on the mat-icon-button width. -->
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+        <!-- Files -->
+        <span (contextmenu)="onRightClick($event, {folder: false, node})"
+            (click)="clickedFiles($event,node)">{{node.name}}</span>
+    </mat-tree-node>
+    <!-- This is the tree node template for expandable nodes -->
+    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <div class="mat-tree-node">
+
+            <!-- ************************************************************************************************* -->
+            <!-- (click)="showChildren($event,node)" -->
+            <!-- add 'showChildren' with this button tag -->
+            <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name" class="saif-fixing">
+                <mat-icon class="mat-icon-rtl-mirror">
+                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                </mat-icon>
+            </button>
+            <!-- ************************************************************************************************* -->
+
+
+
+            <!-- Folder Name -->
+            <span (contextmenu)="onRightClick($event, {folder: true, node})">{{node.name}}</span>
+        </div>
+        <!-- There is inline padding applied to this div using styles.
+            This padding value depends on the mat-icon-button width.  -->
+        <div [class.example-tree-invisible]="!treeControl.isExpanded(node)" role="group">
+            <ng-container matTreeNodeOutlet></ng-container>
+        </div>
+    </mat-nested-tree-node>
+</mat-tree>
+
+
+
+<!-- right click -->
+
+<!-- an hidden div is created to set the position of appearance of the menu-->
+<div style="visibility: hidden; position: fixed;" [style.left.px]="menuTopLeftPosition.x"
+    [style.top.px]="menuTopLeftPosition.y" [matMenuTriggerFor]="rightMenu"></div>
+
+
+<!-- standard material menu -->
+<mat-menu #rightMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item *ngIf="item.folder" (click)="clickedContextMenuItem($event,item.node,'mkdir')">Create
+            Folder</button>
+        <button mat-menu-item *ngIf="item.folder" (click)="clickedContextMenuItem($event,item.node,'mkspf')">Create SOP
+            File</button>
+        <button mat-menu-item *ngIf="item.folder" (click)="clickedContextMenuItem($event,item.node,'mktbl')">Create
+            Table File</button>
+
+        <button mat-menu-item (click)="clickedContextMenuItem($event,item.node,'rm')">Delete</button>
+        <button mat-menu-item (click)="clickedContextMenuItem($event,item.node,'ls')">Rename</button>
+    </ng-template>
+</mat-menu>
