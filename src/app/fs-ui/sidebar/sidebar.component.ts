@@ -1,11 +1,5 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import {
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
@@ -122,8 +116,7 @@ const TREE_DATA: FsNode[] = [
   styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit {
-  @Output() fileEmitterFromSidebar = new EventEmitter();
-
+  @Input() addTabFn_sidebar!: any;
   constructor(
     private fileService: FsUiService,
     private _snackBar: MatSnackBar
@@ -281,6 +274,6 @@ export class SidebarComponent implements OnInit {
 
   clickedFiles(event: any, node: FsNode) {
     console.log('sidebar file:', node);
-    this.fileEmitterFromSidebar.emit(node);
+    this.addTabFn_sidebar(node.name);
   }
 }
