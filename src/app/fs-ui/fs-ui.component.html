@@ -2,13 +2,13 @@
 
     <!-- left sidebar -->
     <mat-drawer #drawer class="example-sidenav" mode="side" opened>
-        <app-sidebar></app-sidebar>
+        <app-sidebar (fileEmitterFromSidebar)="captureFileInFsUi($event)"></app-sidebar>
     </mat-drawer>
 
 
     <!-- right side panel -->
     <div class="example-sidenav-content">
-        <app-tab></app-tab>
+        <app-tab [fileInfo_Tab]="fileInfo_FsUi"></app-tab>
     </div>
 
 </mat-drawer-container>

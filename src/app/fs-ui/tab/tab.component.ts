@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -7,6 +7,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./tab.component.css'],
 })
 export class TabComponent implements OnInit {
+  @Input() fileInfo_Tab!: any;
   constructor() {}
 
   ngOnInit(): void {}
