@@ -27,11 +27,14 @@ export class TabComponent implements AfterViewInit {
   constructor() {}
 
   addTab(obj?: any) {
-    const { node, tabs, selected } = obj;
+    console.log('obj:', obj);
+
+    const { node, tabs, selected, fileService } = obj;
 
     // console.log('node:', node);
-    console.log('tabs:', tabs);
+    // console.log('tabs:', tabs);
     // console.log('selected:', selected);
+    console.log('fileService:', fileService);
 
     const tabTitle = node.name;
     console.log('tabTitle:', tabTitle);
@@ -40,12 +43,25 @@ export class TabComponent implements AfterViewInit {
     if (tabs.includes(tabTitle)) {
       selected.setValue(tabs.indexOf(tabTitle));
       return;
-    }
-    // ekhane jei naam dibo she name tab create hobe
-    tabs.push(tabTitle!);
+    } else {
+      // ekhane jei naam dibo she name tab create hobe
+      tabs.push(tabTitle!);
 
-    //whenever a new tab is created, go to that tab
-    selected.setValue(tabs.length - 1);
+      //whenever a new tab is created, go to that tab
+      selected.setValue(tabs.length - 1);
+    }
+
+    fileService.changeDirAPI(node).subscribe((data: any) => {
+      console.log('data:', data);
+      fileService.cmdEnterTableApi(node).subscribe((res: any) => {
+        console.log('entbl res:', res);
+        if (res.success) {
+          fileService.cmdDescribeApi().subscribe((result: any) => {
+            console.log('describe : ', result);
+          });
+        }
+      });
+    });
   }
 
   removeTab(index: number) {

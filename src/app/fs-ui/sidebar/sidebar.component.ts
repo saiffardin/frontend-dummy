@@ -1,5 +1,5 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component,Input,OnInit,ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
@@ -286,6 +286,6 @@ export class SidebarComponent implements OnInit {
     // console.log('addTab', addTab);
     console.log('----------------------------');
 
-    addTab({ node, tabs, selected });
+    addTab({ node, tabs, selected, fileService: this.fileService });
   }
 }

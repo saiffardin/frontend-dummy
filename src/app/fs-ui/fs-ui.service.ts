@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FsNode } from './FsNode';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -23,7 +22,7 @@ export class FsUiService {
     if (extension === '.dir') {
       path = nodeName === 'root' ? './' : `${node.path}/${nodeName}`;
     } else {
-        path = node.path!;
+      path = node.path!;
     }
 
     console.log('path:', path);
@@ -86,8 +85,49 @@ export class FsUiService {
     return this.http.post<any>(url, reqBody, httpOptions);
   }
 
-  showChildrenAPI(node: FsNode): Observable<FsNode> | any {
-    let nodeName = node.name;
-    return this.changeDirAPI(node);
+  // cmd: entbl
+  cmdEnterTableApi(node: FsNode): Observable<FsNode> | any {
+    const url = `http://192.168.100.37:8080/fs`;
+    console.log('entbl node:', node.name);
+
+    const reqBody = {
+      command: 'entbl',
+      arguments: `${node.name}`,
+    };
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    let httpOptions = {
+      headers: headers,
+    };
+
+    return this.http.post<any>(url, reqBody, httpOptions);
   }
+
+  // cmd: describe
+  cmdDescribeApi(): Observable<FsNode> | any {
+    const url = `http://192.168.100.37:8080/fs`;
+
+    const reqBody = {
+      command: 'describe',
+      arguments: '',
+    };
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    let httpOptions = {
+      headers: headers,
+    };
+
+    return this.http.post<any>(url, reqBody, httpOptions);
+  }
+
+  //   showChildrenAPI(node: FsNode): Observable<FsNode> | any {
+  //     let nodeName = node.name;
+  //     return this.changeDirAPI(node);
+  //   }
 }
