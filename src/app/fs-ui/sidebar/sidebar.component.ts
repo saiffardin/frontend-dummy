@@ -7,19 +7,18 @@ import { FsUiService } from '../fs-ui.service';
 import { FsNode } from '../FsNode';
 
 // main tree
-/*
-  const TREE_DATA: FsNode[] = [
-    {
-      name: 'root',
-      children: [],
-      path: '',
-      isFolder: true,
-      extension: '.dir',
-    },
-  ];
-  */
+const TREE_DATA: FsNode[] = [
+  {
+    name: 'root',
+    children: [],
+    path: '',
+    isFolder: true,
+    extension: '.dir',
+  },
+];
 
 // test tree
+/*
 const TREE_DATA: FsNode[] = [
   {
     name: 'root',
@@ -109,6 +108,7 @@ const TREE_DATA: FsNode[] = [
     extension: '.dir',
   },
 ];
+*/
 
 @Component({
   selector: 'app-sidebar',

@@ -14,7 +14,8 @@
             <!-- ************************************************************************************************* -->
             <!-- (click)="showChildren($event,node)" -->
             <!-- add 'showChildren' with this button tag -->
-            <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name" class="saif-fixing">
+            <button (click)="showChildren($event,node)" mat-icon-button matTreeNodeToggle
+                [attr.aria-label]="'Toggle ' + node.name" class="saif-fixing">
                 <mat-icon class="mat-icon-rtl-mirror">
                     {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                 </mat-icon>
