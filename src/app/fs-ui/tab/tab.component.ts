@@ -29,13 +29,18 @@ export class TabComponent implements AfterViewInit {
   addTab(obj?: any) {
     const { node, tabs, selected } = obj;
 
-    console.log('node:', node);
+    // console.log('node:', node);
     console.log('tabs:', tabs);
-    console.log('selected:', selected);
+    // console.log('selected:', selected);
 
     const tabTitle = node.name;
     console.log('tabTitle:', tabTitle);
 
+    // if tab is already open, then no need to create another tab
+    if (tabs.includes(tabTitle)) {
+      selected.setValue(tabs.indexOf(tabTitle));
+      return;
+    }
     // ekhane jei naam dibo she name tab create hobe
     tabs.push(tabTitle!);
 
