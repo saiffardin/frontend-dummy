@@ -6,16 +6,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./fs-ui.component.css'],
 })
 export class FsUiComponent implements OnInit {
-  addTab_FsUi!: any;
+  TabObjInFsUi!: any;
   constructor() {}
 
   ngOnInit(): void {}
 
-  captureAddTabInFsUi(fn: any) {
-    console.log('captureAddTabInFsUi: ', fn);
-    this.addTab_FsUi = fn;
+  captureObjInFsUi(obj: any) {
+    console.log('captureAddTabInFsUi: ', obj);
+    this.TabObjInFsUi = obj;
 
-    // console.log('this.addTab_FsUi :', this.addTab_FsUi);
+    console.log('this.TabObjInFsUi :', this.TabObjInFsUi);
     console.log('----------------------------');
   }
 }

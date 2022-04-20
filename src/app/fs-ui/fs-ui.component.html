@@ -2,13 +2,14 @@
 
     <!-- left sidebar -->
     <mat-drawer #drawer class="example-sidenav" mode="side" opened>
-        <app-sidebar [addTabFn_sidebar]="addTab_FsUi"></app-sidebar>
+        <!-- [TabObjInSidebar]="TabObjInFsUi" -->
+        <app-sidebar [TabObjInSidebar]="TabObjInFsUi" ></app-sidebar>
     </mat-drawer>
 
 
     <!-- right side panel -->
     <div class="example-sidenav-content">
-        <app-tab (fileEmitterFromTab)="captureAddTabInFsUi($event)"></app-tab>
+        <app-tab (fileEmitterFromTab)="captureObjInFsUi($event)"></app-tab>
     </div>
 
 </mat-drawer-container>

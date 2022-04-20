@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -13,31 +7,40 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./tab.component.css'],
 })
 export class TabComponent implements AfterViewInit {
+  tabs: any[] = ['First'];
+  selected = new FormControl(0);
+
   ngAfterViewInit() {
     console.log('AfterViewInit');
 
     setTimeout(() => {
-      this.fileEmitterFromTab.emit(this.addTab);
+      this.fileEmitterFromTab.emit({
+        addTab: this.addTab,
+        tabs: this.tabs,
+        selected: this.selected,
+      });
     }, 0);
   }
 
-  @Input() fileInfo_Tab!: any;
+  //   @Input() fileInfo_Tab!: any;
   @Output() fileEmitterFromTab = new EventEmitter();
   constructor() {}
 
-  tabs: any[] = ['First'];
-  selected = new FormControl(0);
+  addTab(obj?: any) {
+    const { node, tabs, selected } = obj;
 
-  addTab(tabTitle?: any) {
+    console.log('node:', node);
+    console.log('tabs:', tabs);
+    console.log('selected:', selected);
+
+    const tabTitle = node.name;
     console.log('tabTitle:', tabTitle);
-    console.log('this.tabs:', this.tabs);
-    console.log('this.selected:', this.selected);
 
     // ekhane jei naam dibo she name tab create hobe
-    // this.tabs.push(tabTitle!);
+    tabs.push(tabTitle!);
 
     //whenever a new tab is created, go to that tab
-    // this.selected.setValue(this.tabs.length - 1);
+    selected.setValue(tabs.length - 1);
   }
 
   removeTab(index: number) {

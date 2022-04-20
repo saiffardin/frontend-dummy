@@ -116,7 +116,8 @@ const TREE_DATA: FsNode[] = [
   styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit {
-  @Input() addTabFn_sidebar!: any;
+  @Input() TabObjInSidebar!: any;
+  count = 0;
   constructor(
     private fileService: FsUiService,
     private _snackBar: MatSnackBar
@@ -272,8 +273,24 @@ export class SidebarComponent implements OnInit {
     }, this.commonErrorHandler);
   }
 
-  clickedFiles(event: any, node: FsNode) {
+  clickedFiles(obj: any, node: FsNode) {
+    this.count++;
+    console.log('count:', this.count);
+
     console.log('sidebar file:', node);
-    this.addTabFn_sidebar(node.name);
+
+    // this.TabObjInSidebar(node.name);
+    // console.log('obj:', obj);
+    console.log('node:', node);
+    console.log('TabObjInSidebar:', this.TabObjInSidebar);
+
+    const { addTab, selected, tabs } = this.TabObjInSidebar;
+
+    // console.log('tabs', tabs);
+    // console.log('selected', selected);
+    // console.log('addTab', addTab);
+    console.log('----------------------------');
+
+    addTab({ node, tabs, selected });
   }
 }
