@@ -286,6 +286,21 @@ export class SidebarComponent implements OnInit {
     // console.log('addTab', addTab);
     console.log('----------------------------');
 
-    addTab({ node, tabs, selected, fileService: this.fileService });
+    addTab({ node, tabs, selected});
+    // addTab({ node, tabs, selected, tabContent: result.data });
+
+    /*
+    this.fileService.changeDirAPI(node).subscribe((data: any) => {
+      console.log('data:', data);
+      this.fileService.cmdEnterTableApi(node).subscribe((res: any) => {
+        console.log('entbl res:', res);
+        if (res.success) {
+            this.fileService.cmdDescribeApi().subscribe((result: any) => {
+            console.log('describe : ', result);
+          });
+        }
+      });
+    });
+    */
   }
 }

@@ -4,12 +4,30 @@
 </mat-form-field>
 
 <mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)">
-    <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
-        Contents for {{tab}} tab
 
-        <button mat-raised-button class="example-delete-tab-button" [disabled]="tabs.length === 1"
+    <!-- [label]="tab.name" -->
+    <mat-tab *ngFor="let tab of tabs; let index = index">
+
+        <ng-template mat-tab-label>
+
+            <span>{{tab.name}}</span>
+            <span id="betweenTitleAndIcon"></span>
+            <mat-icon (click)="iconClicked(index)" class="example-tab-icon">cancel</mat-icon>
+        </ng-template>
+
+
+
+        <div style="margin-top: 10px;">
+            Contents for <span style="font-weight: 600;">{{tab.name}}</span> tab
+        </div>
+
+        <!-- <h3>{{tab.content}}</h3> -->
+
+
+        <!-- <button mat-raised-button class="example-delete-tab-button" [disabled]="tabs.length === 1"
             (click)="removeTab(index)">
             Delete Tab
-        </button>
+        </button> -->
     </mat-tab>
+
 </mat-tab-group>

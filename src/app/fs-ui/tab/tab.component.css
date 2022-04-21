@@ -3,3 +3,21 @@
 .example-delete-tab-button {
   margin: 8px;
 }
+
+.example-tab-icon {
+    margin-right: 0px;
+    display: flex;
+    align-items: center;
+    /* padding-left: 40px; */
+    font-size: 16px;
+    /* align-items: flex-end; */
+}
+
+.example-tab-icon:hover {
+    color: red;
+}
+
+#betweenTitleAndIcon {
+    padding-right: 50px;
+
+}

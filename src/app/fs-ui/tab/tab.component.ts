@@ -7,7 +7,9 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./tab.component.css'],
 })
 export class TabComponent implements AfterViewInit {
-  tabs: any[] = ['First'];
+  //   tabs: any[] = ['First'];
+  tabs: any[] = [{ name: 'First', content: '' }];
+
   selected = new FormControl(0);
 
   ngAfterViewInit() {
@@ -29,28 +31,34 @@ export class TabComponent implements AfterViewInit {
   addTab(obj?: any) {
     console.log('obj:', obj);
 
-    const { node, tabs, selected, fileService } = obj;
+    const { node, tabs, selected, tabContent } = obj;
 
     // console.log('node:', node);
     // console.log('tabs:', tabs);
     // console.log('selected:', selected);
-    console.log('fileService:', fileService);
+    console.log('tabContent:', tabContent);
 
     const tabTitle = node.name;
     console.log('tabTitle:', tabTitle);
 
+    const allTabsName = tabs.map((tab: any) => tab.name);
+
     // if tab is already open, then no need to create another tab
-    if (tabs.includes(tabTitle)) {
-      selected.setValue(tabs.indexOf(tabTitle));
+    if (allTabsName.includes(tabTitle)) {
+      selected.setValue(allTabsName.indexOf(tabTitle));
       return;
     } else {
       // ekhane jei naam dibo she name tab create hobe
-      tabs.push(tabTitle!);
+      tabs.push({ name: tabTitle, content: tabContent });
 
       //whenever a new tab is created, go to that tab
       selected.setValue(tabs.length - 1);
     }
 
+    // calling api to enter the table
+    // and getting the content out of it
+    // this piece of code will switch to sidebar
+    /*
     fileService.changeDirAPI(node).subscribe((data: any) => {
       console.log('data:', data);
       fileService.cmdEnterTableApi(node).subscribe((res: any) => {
@@ -62,9 +70,15 @@ export class TabComponent implements AfterViewInit {
         }
       });
     });
+    */
   }
 
   removeTab(index: number) {
+    this.tabs.splice(index, 1);
+  }
+
+  iconClicked(index: number) {
+    console.log('icon clicked');
     this.tabs.splice(index, 1);
   }
 }
