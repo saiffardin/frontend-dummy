@@ -25,9 +25,34 @@ export class FsUiService {
       path = node.path!;
     }
 
-    console.log('path:', path);
+    console.log('path in arg:', path);
 
-    console.log('--------------------');
+    console.log('-------------------- cd');
+
+    const reqBody = {
+      command: 'cd',
+      arguments: path,
+    };
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    let httpOptions = {
+      headers: headers,
+    };
+
+    return this.http.post<any>(url, reqBody, httpOptions);
+  }
+
+  // cmd: cd (path)
+  cdPathAPI(path: string): Observable<FsNode> | any {
+    const url = `http://192.168.100.37:8080/fs`;
+
+
+    console.log('fs service || param path in cd:', path);
+
+    path = path === 'root' ? './' : path;
 
     const reqBody = {
       command: 'cd',
@@ -126,8 +151,30 @@ export class FsUiService {
     return this.http.post<any>(url, reqBody, httpOptions);
   }
 
-  //   showChildrenAPI(node: FsNode): Observable<FsNode> | any {
-  //     let nodeName = node.name;
-  //     return this.changeDirAPI(node);
-  //   }
+  // cmd: rm (remove)
+  removeAPI(node: FsNode): Observable<FsNode> | any {
+    const url = `http://192.168.100.37:8080/fs`;
+
+    console.log('node:', node);
+
+    const { children, extension, isFolder, name, path } = node;
+
+    console.log('-------------------- fs service - rm');
+
+    const reqBody = {
+      command: 'rm',
+      arguments: name,
+    };
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    let httpOptions = {
+      headers: headers,
+    };
+
+    return this.http.post<any>(url, reqBody, httpOptions);
+    // return new Observable((subscriber) => subscriber.complete());
+  }
 }

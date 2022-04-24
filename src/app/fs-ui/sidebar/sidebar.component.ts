@@ -1,5 +1,5 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { Component,Input,OnInit,ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
@@ -246,16 +246,14 @@ export class SidebarComponent implements OnInit {
     this.matMenuTrigger.openMenu();
   }
 
-  clickedContextMenuItem(event: any, node: FsNode, command: string) {
-    // console.log(event);
-    console.log(node);
-    console.log('command: ', command);
-    console.log('--------------------------');
+  clickedContextMenuItem(event: any, obj: { node: FsNode; command: string }) {
+    const { node, command } = obj;
+
     // rename er api er command a 'ls' dewa
 
     const { children, extension, isFolder, name, path } = node;
 
-    if ((command === 'rm' || command === 'ls') && name === 'root') {
+    if (name === 'root' && (command === 'rm' || command === 'ls')) {
       let action = command === 'rm' ? 'delete' : 'rename';
       let message = `Can't ${action} the root folder`;
       console.log(message);
@@ -264,19 +262,70 @@ export class SidebarComponent implements OnInit {
       return;
     }
 
-    // do cd first
-    // then delete the file
+    // do cd first for - creating folder or file
+    // to delete or rename the file - no cd required
 
-    this.fileService.changeDirAPI(node).subscribe((data: any) => {
-      console.log('cd:', data);
-      // call delete api here
-    }, this.commonErrorHandler);
+    switch (command) {
+      case 'mkdir':
+        console.log('switch mkdir cmd');
+        break;
+
+      case 'mktbl':
+        console.log('switch mktbl cmd');
+        break;
+
+      case 'mkspf':
+        console.log('switch mkspf cmd');
+        break;
+
+      case 'mkspf':
+        console.log('switch mkspf cmd');
+        break;
+
+      case 'rm':
+        console.log('switch rm cmd');
+
+        let parentPath: string = node.path!;
+        console.log('parentPath:', parentPath);
+
+        this.fileService.cdPathAPI(parentPath).subscribe((data: any) => {
+          console.log('cdPathAPI:', data);
+
+          //   const parentNode = this.getNodeByPath(parentPath);
+          console.log(`id - ${node.id}`);
+          console.log(`clicked - ${node.name}`);
+
+          console.log('TREE_DATA:', TREE_DATA);
+
+          
+
+          //   this.fileService.removeAPI(node).subscribe((data: any) => {
+          //     console.log('response from remove API:', data);
+          //     console.log('TREE_DATA:', TREE_DATA);
+          //   });
+        });
+
+        break;
+
+      case 'ls':
+        console.log('switch ls cmd -- bcz no rename api');
+        break;
+
+      default:
+        console.error('No such command exists!');
+        break;
+    }
+
+    // this.fileService.changeDirAPI(node).subscribe((data: any) => {
+    //   console.log('cd:', data);
+    //   console.log('switch cmd:', command);
+    //   // call delete api here
+    // }, this.commonErrorHandler);
   }
 
   clickedFiles(obj: any, node: FsNode) {
     const { addTab, selected, tabs } = this.TabObjInSidebar;
 
-    
     // console.log('obj:', obj);
     // console.log('node:', node);
     console.log('TabObjInSidebar:', this.TabObjInSidebar);
@@ -286,7 +335,7 @@ export class SidebarComponent implements OnInit {
     // console.log('addTab', addTab);
     console.log('----------------------------');
 
-    addTab({ node, tabs, selected});
+    addTab({ node, tabs, selected });
     // addTab({ node, tabs, selected, tabContent: result.data });
 
     /*
@@ -302,5 +351,13 @@ export class SidebarComponent implements OnInit {
       });
     });
     */
+  }
+
+  getNodeByPath(path: string) {
+    console.log('getNodeByPath:', path);
+    // root/ACL/ACL-2
+    const nodesStr = path.split('/');
+    console.log('nodesStr:', nodesStr);
+    console.log('TREE_DATA:', TREE_DATA);
   }
 }
