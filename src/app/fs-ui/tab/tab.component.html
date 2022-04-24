@@ -1,7 +1,7 @@
-<mat-form-field appearance="fill">
+<!-- <mat-form-field appearance="fill">
     <mat-label>Selected tab index</mat-label>
     <input matInput type="number" [formControl]="selected">
-</mat-form-field>
+</mat-form-field> -->
 
 <mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)">
 
