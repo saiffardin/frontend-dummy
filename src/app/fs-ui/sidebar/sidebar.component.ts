@@ -1,10 +1,18 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { FsUiService } from '../fs-ui.service';
 import { FsNode } from '../FsNode';
+import { DialogData } from './DialogData';
 
 // main tree
 let TREE_DATA: FsNode[] = [
@@ -117,10 +125,12 @@ let TREE_DATA: FsNode[] = [
 })
 export class SidebarComponent implements OnInit {
   @Input() TabObjInSidebar!: any;
+  @ViewChild('dialogRefHtml') dialogRef!: TemplateRef<any>;
 
   constructor(
     private fileService: FsUiService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {
     this.dataSource.data = TREE_DATA;
   }
@@ -133,6 +143,9 @@ export class SidebarComponent implements OnInit {
 
   // rc - we create an object that contains coordinates
   menuTopLeftPosition = { x: 0, y: 0 };
+
+  //   dialogData
+  dialogData: DialogData = { type: '' };
 
   // rc - reference to the MatMenuTrigger in the DOM
   @ViewChild(MatMenuTrigger, { static: true }) matMenuTrigger!: MatMenuTrigger;
@@ -268,6 +281,7 @@ export class SidebarComponent implements OnInit {
     switch (command) {
       case 'mkdir':
         console.log('switch mkdir cmd');
+        this.openDialog('Folder');
         break;
 
       case 'mktbl':
@@ -289,12 +303,12 @@ export class SidebarComponent implements OnInit {
         console.log('parentPath:', parentPath);
 
         this.fileService.cdPathAPI(parentPath).subscribe((data: any) => {
-        //   console.log('cdPathAPI:', data);
+          //   console.log('cdPathAPI:', data);
 
           console.log(`id - ${node.id}`);
           console.log(`clicked - ${node.name}`);
 
-        //   console.log('dataSource:', this.dataSource.data);
+          //   console.log('dataSource:', this.dataSource.data);
 
           this.fileService.removeAPI(node).subscribe((data: any) => {
             console.log('response from remove API:', data);
@@ -375,5 +389,22 @@ export class SidebarComponent implements OnInit {
       });
     });
     */
+  }
+
+  openDialog(type: string): void {
+    console.log('type:', type);
+
+    this.dialogData.type = type;
+    const dialogRef = this.dialog.open(this.dialogRef, {
+      width: '250px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed:', result);
+      if (result === 'Cancel') return;
+
+      console.log('after return')
+      //   this.animal = result;
+    });
   }
 }

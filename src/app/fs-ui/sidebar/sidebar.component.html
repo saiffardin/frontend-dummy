@@ -68,3 +68,25 @@
         <button mat-menu-item (click)="clickedContextMenuItem($event,{node:item.node,command:'ls'})">Rename</button>
     </ng-template>
 </mat-menu>
+
+
+<!-- dialog -->
+<ng-template  #dialogRefHtml>
+    <!-- <h1 mat-dialog-title>Hi {{data.name}}</h1> -->
+    <h1 mat-dialog-title>Create {{dialogData.type}}</h1>
+
+    <div mat-dialog-content>
+        
+        <mat-form-field appearance="fill">
+            <mat-label>Enter {{dialogData.type}} Name</mat-label>
+
+            <input matInput #dialogInput>
+
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button color="warn" [mat-dialog-close]="'Cancel'">Cancel</button>
+        <button mat-button [mat-dialog-close]="dialogInput.value" cdkFocusInitial>Create</button>
+    </div>
+
+</ng-template>
