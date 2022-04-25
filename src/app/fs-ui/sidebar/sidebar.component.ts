@@ -7,7 +7,7 @@ import { FsUiService } from '../fs-ui.service';
 import { FsNode } from '../FsNode';
 
 // main tree
-const TREE_DATA: FsNode[] = [
+let TREE_DATA: FsNode[] = [
   {
     name: 'root',
     children: [],
@@ -19,7 +19,7 @@ const TREE_DATA: FsNode[] = [
 
 // test tree
 /*
-const TREE_DATA: FsNode[] = [
+let TREE_DATA: FsNode[] = [
   {
     name: 'root',
     children: [
@@ -289,20 +289,43 @@ export class SidebarComponent implements OnInit {
         console.log('parentPath:', parentPath);
 
         this.fileService.cdPathAPI(parentPath).subscribe((data: any) => {
-          console.log('cdPathAPI:', data);
+        //   console.log('cdPathAPI:', data);
 
-          //   const parentNode = this.getNodeByPath(parentPath);
           console.log(`id - ${node.id}`);
           console.log(`clicked - ${node.name}`);
 
-          console.log('TREE_DATA:', TREE_DATA);
+        //   console.log('dataSource:', this.dataSource.data);
 
-          
+          this.fileService.removeAPI(node).subscribe((data: any) => {
+            console.log('response from remove API:', data);
 
-          //   this.fileService.removeAPI(node).subscribe((data: any) => {
-          //     console.log('response from remove API:', data);
-          //     console.log('TREE_DATA:', TREE_DATA);
-          //   });
+            if (data.success) {
+              //   refresh
+              this.dataSource.data = [
+                {
+                  name: 'root',
+                  children: [],
+                  path: '',
+                  isFolder: true,
+                  extension: '.dir',
+                },
+              ];
+
+              TREE_DATA = [
+                {
+                  name: 'root',
+                  children: [],
+                  path: '',
+                  isFolder: true,
+                  extension: '.dir',
+                },
+              ];
+            }
+
+            // after delete
+            // console.log('after delete dataSource:', this.dataSource.data);
+            // console.log('after delete TREE_DATA:', TREE_DATA);
+          });
         });
 
         break;
@@ -328,6 +351,7 @@ export class SidebarComponent implements OnInit {
 
     // console.log('obj:', obj);
     // console.log('node:', node);
+
     console.log('TabObjInSidebar:', this.TabObjInSidebar);
 
     // console.log('tabs', tabs);
@@ -351,13 +375,5 @@ export class SidebarComponent implements OnInit {
       });
     });
     */
-  }
-
-  getNodeByPath(path: string) {
-    console.log('getNodeByPath:', path);
-    // root/ACL/ACL-2
-    const nodesStr = path.split('/');
-    console.log('nodesStr:', nodesStr);
-    console.log('TREE_DATA:', TREE_DATA);
   }
 }
