@@ -14,6 +14,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { FsUiComponent } from './fs-ui/fs-ui.component';
 import { SidebarComponent } from './fs-ui/sidebar/sidebar.component';
@@ -38,6 +39,7 @@ import { TabComponent } from './fs-ui/tab/tab.component';
     MatSidenavModule,
     MatDialogModule,
     MatButtonModule,
+    RouterModule.forRoot([]),
   ],
   providers: [],
   bootstrap: [AppComponent],

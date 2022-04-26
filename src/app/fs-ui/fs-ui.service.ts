@@ -177,4 +177,31 @@ export class FsUiService {
     return this.http.post<any>(url, reqBody, httpOptions);
     // return new Observable((subscriber) => subscriber.complete());
   }
+
+  // cmd: mkdir 
+  folderCreateAPI(folderName: string): Observable<FsNode> | any {
+    const url = `http://192.168.100.37:8080/fs`;
+
+    console.log('folderName:', folderName);
+
+    
+
+    console.log('-------------------- fs service - mkdir');
+
+    const reqBody = {
+      command: 'ls',
+      arguments: folderName,
+    };
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    let httpOptions = {
+      headers: headers,
+    };
+
+    // return this.http.post<any>(url, reqBody, httpOptions);
+    return new Observable((subscriber) => subscriber.complete());
+  }
 }

@@ -71,12 +71,15 @@
 
 
 <!-- dialog -->
-<ng-template  #dialogRefHtml>
-    <!-- <h1 mat-dialog-title>Hi {{data.name}}</h1> -->
+<ng-template #dialogRefHtml>
+
     <h1 mat-dialog-title>Create {{dialogData.type}}</h1>
 
     <div mat-dialog-content>
-        
+
+        <p style="width: 200px;">{{dialogData.type}} will be created under <span
+                style="font-weight: 500;">{{dialogData.name}}</span> folder.</p>
+
         <mat-form-field appearance="fill">
             <mat-label>Enter {{dialogData.type}} Name</mat-label>
 
@@ -84,9 +87,12 @@
 
         </mat-form-field>
     </div>
+
     <div mat-dialog-actions>
-        <button mat-button color="warn" [mat-dialog-close]="'Cancel'">Cancel</button>
-        <button mat-button [mat-dialog-close]="dialogInput.value" cdkFocusInitial>Create</button>
+        <button mat-button color="warn" [mat-dialog-close] (click)=" closeDialog()">Cancel</button>
+
+        <button mat-button [mat-dialog-close] cdkFocusInitial
+            (click)="createFolderFromDialog(dialogInput.value)">Create</button>
     </div>
 
 </ng-template>

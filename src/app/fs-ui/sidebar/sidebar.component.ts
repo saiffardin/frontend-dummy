@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { Router } from '@angular/router';
 import { FsUiService } from '../fs-ui.service';
 import { FsNode } from '../FsNode';
 import { DialogData } from './DialogData';
@@ -125,12 +126,13 @@ let TREE_DATA: FsNode[] = [
 })
 export class SidebarComponent implements OnInit {
   @Input() TabObjInSidebar!: any;
-  @ViewChild('dialogRefHtml') dialogRef!: TemplateRef<any>;
+  @ViewChild('dialogRefHtml') dialogRefHtml!: TemplateRef<any>;
 
   constructor(
     private fileService: FsUiService,
     private _snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public router: Router
   ) {
     this.dataSource.data = TREE_DATA;
   }
@@ -281,7 +283,15 @@ export class SidebarComponent implements OnInit {
     switch (command) {
       case 'mkdir':
         console.log('switch mkdir cmd');
-        this.openDialog('Folder');
+        let folderPath = node.path || './';
+        console.log('folderPath:', folderPath);
+        console.log('clicked upon:', node.name);
+
+        // console.log('folderPath:', folderPath);
+
+        console.log('================');
+
+        this.openDialog({ type: 'Folder', name: node.name });
         break;
 
       case 'mktbl':
@@ -315,25 +325,7 @@ export class SidebarComponent implements OnInit {
 
             if (data.success) {
               //   refresh
-              this.dataSource.data = [
-                {
-                  name: 'root',
-                  children: [],
-                  path: '',
-                  isFolder: true,
-                  extension: '.dir',
-                },
-              ];
-
-              TREE_DATA = [
-                {
-                  name: 'root',
-                  children: [],
-                  path: '',
-                  isFolder: true,
-                  extension: '.dir',
-                },
-              ];
+              this.refreshTree();
             }
 
             // after delete
@@ -352,12 +344,6 @@ export class SidebarComponent implements OnInit {
         console.error('No such command exists!');
         break;
     }
-
-    // this.fileService.changeDirAPI(node).subscribe((data: any) => {
-    //   console.log('cd:', data);
-    //   console.log('switch cmd:', command);
-    //   // call delete api here
-    // }, this.commonErrorHandler);
   }
 
   clickedFiles(obj: any, node: FsNode) {
@@ -391,20 +377,53 @@ export class SidebarComponent implements OnInit {
     */
   }
 
-  openDialog(type: string): void {
+  openDialog(obj: { type: string; name: string }): void {
+    const { name, type } = obj;
     console.log('type:', type);
 
     this.dialogData.type = type;
-    const dialogRef = this.dialog.open(this.dialogRef, {
-      width: '250px',
-    });
+    this.dialogData.name = name;
+    
+    this.dialog.open(this.dialogRefHtml);
+  }
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed:', result);
-      if (result === 'Cancel') return;
+  closeDialog() {
+    console.log('closeDialog');
+  }
 
-      console.log('after return')
-      //   this.animal = result;
-    });
+  createFolderFromDialog(name: string) {
+    console.log('createFolderFromDialog:', name);
+    name = name.trim();
+    // console.log('after trim:', name.length);
+
+    if (name.length === 0) {
+      this._snackBar.open('Every folder must have a name', 'STOP');
+      return;
+    }
+
+    console.log('length passed:', name.length);
+  }
+
+  refreshTree() {
+    //   refresh
+    this.dataSource.data = [
+      {
+        name: 'root',
+        children: [],
+        path: '',
+        isFolder: true,
+        extension: '.dir',
+      },
+    ];
+
+    TREE_DATA = [
+      {
+        name: 'root',
+        children: [],
+        path: '',
+        isFolder: true,
+        extension: '.dir',
+      },
+    ];
   }
 }
