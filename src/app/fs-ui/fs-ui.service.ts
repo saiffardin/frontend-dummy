@@ -49,7 +49,6 @@ export class FsUiService {
   cdPathAPI(path: string): Observable<FsNode> | any {
     const url = `http://192.168.100.37:8080/fs`;
 
-
     console.log('fs service || param path in cd:', path);
 
     path = path === 'root' ? './' : path;
@@ -178,18 +177,16 @@ export class FsUiService {
     // return new Observable((subscriber) => subscriber.complete());
   }
 
-  // cmd: mkdir 
-  folderCreateAPI(folderName: string): Observable<FsNode> | any {
+  // cmd: mkdir
+  createFolderAPI(folderName: string): Observable<FsNode> | any {
     const url = `http://192.168.100.37:8080/fs`;
 
     console.log('folderName:', folderName);
 
-    
-
     console.log('-------------------- fs service - mkdir');
 
     const reqBody = {
-      command: 'ls',
+      command: 'mkdir',
       arguments: folderName,
     };
 
@@ -201,7 +198,7 @@ export class FsUiService {
       headers: headers,
     };
 
-    // return this.http.post<any>(url, reqBody, httpOptions);
-    return new Observable((subscriber) => subscriber.complete());
+    return this.http.post<any>(url, reqBody, httpOptions);
+    // return new Observable((subscriber) => subscriber.complete());
   }
 }

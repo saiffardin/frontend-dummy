@@ -277,21 +277,32 @@ export class SidebarComponent implements OnInit {
       return;
     }
 
+    console.log('clickedContextMenuItem');
+
     // do cd first for - creating folder or file
     // to delete or rename the file - no cd required
 
+    this.handleSwitchCase(command, node);
+  }
+
+  handleSwitchCase(command: string, node: FsNode) {
     switch (command) {
       case 'mkdir':
-        console.log('switch mkdir cmd');
-        let folderPath = node.path || './';
-        console.log('folderPath:', folderPath);
-        console.log('clicked upon:', node.name);
+        console.log('switch mkdir cmd ===', node.name);
 
-        // console.log('folderPath:', folderPath);
+        let folderPath =
+          node.name === 'root' ? './' : `${node.path}/${node.name}`;
 
         console.log('================');
+        console.log('folderPath:', folderPath);
+        console.log('clicked upon:', node.name);
+        console.log('================');
 
-        this.openDialog({ type: 'Folder', name: node.name });
+        this.fileService.cdPathAPI(folderPath).subscribe((res: any) => {
+          console.log('cd mkdir', res);
+          this.openDialog({ type: 'Folder', name: node.name });
+        });
+
         break;
 
       case 'mktbl':
@@ -377,13 +388,15 @@ export class SidebarComponent implements OnInit {
     */
   }
 
+  //   handleSwitchCase()
+
   openDialog(obj: { type: string; name: string }): void {
     const { name, type } = obj;
     console.log('type:', type);
 
     this.dialogData.type = type;
     this.dialogData.name = name;
-    
+
     this.dialog.open(this.dialogRefHtml);
   }
 
@@ -397,11 +410,16 @@ export class SidebarComponent implements OnInit {
     // console.log('after trim:', name.length);
 
     if (name.length === 0) {
-      this._snackBar.open('Every folder must have a name', 'STOP');
+      this._snackBar.open('Every folder must have a name.', 'STOP');
       return;
     }
 
     console.log('length passed:', name.length);
+
+    // call mkdir API
+    this.fileService.createFolderAPI(name).subscribe((res: any) => {
+      console.log('api mkdir res:', res);
+    });
   }
 
   refreshTree() {
