@@ -419,6 +419,9 @@ export class SidebarComponent implements OnInit {
     // call mkdir API
     this.fileService.createFolderAPI(name).subscribe((res: any) => {
       console.log('api mkdir res:', res);
+      if (res.success) {
+        this.refreshTree();
+      }
     });
   }
 
