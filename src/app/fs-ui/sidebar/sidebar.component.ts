@@ -185,7 +185,15 @@ export class SidebarComponent implements OnInit {
       return;
     }
 
-    // let { name,path } = node;
+    let { name, path, children, isFolder, extension } = node;
+
+    console.log('show children extension:', extension);
+    console.log('show children name:', name);
+    console.log('%cbefore path:', 'color:red', path);
+
+    path = name === 'root' ? './' : `${path}/${name}`;
+
+    console.log('%cafter path:', 'color:red', path);
 
     this.fileService.changeDirAPI(node).subscribe((data: any) => {
       console.log('data:', data);
@@ -448,7 +456,7 @@ export class SidebarComponent implements OnInit {
   /**
    * 'createFolderFromDialog' method is called
    * to make an api call (with proper parameters) to create a folder.
-   * @param obj.name denotes the 'name' that user wants to create the folder
+   * @param name denotes the 'name' that user wants to create the folder
    */
   createFolderFromDialog(name: string) {
     console.log('createFolderFromDialog:', name);
@@ -471,7 +479,7 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  // table file create
+  /** table file create*/
   createTableFileFromDialog(name: string) {
     console.log('Files From Dialog -- name :', name);
 
@@ -494,7 +502,7 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  // sop file create
+  /** sop file create*/
   createSopFileFromDialog(name: string) {
     console.log('Files From Dialog -- name :', name);
 

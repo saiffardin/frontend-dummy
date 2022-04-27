@@ -51,7 +51,7 @@ export class FsUiService {
 
     console.log('fs service || param path in cd:', path);
 
-    path = path === 'root' ? './' : path;
+    // path = path === 'root' ? './' : path;
 
     const reqBody = {
       command: 'cd',
@@ -227,9 +227,8 @@ export class FsUiService {
     // return new Observable((subscriber) => subscriber.complete());
   }
 
-
-   // cmd: mkspf
-   createSopFileAPI(fileName: string): Observable<FsNode> | any {
+  // cmd: mkspf
+  createSopFileAPI(fileName: string): Observable<FsNode> | any {
     const url = `http://192.168.100.37:8080/fs`;
 
     console.log('fileName:', fileName);
