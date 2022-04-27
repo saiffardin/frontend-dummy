@@ -10,7 +10,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
-import { Router } from '@angular/router';
 import { FsUiService } from '../fs-ui.service';
 import { FsNode } from '../FsNode';
 import { DialogData } from './DialogData';
@@ -131,8 +130,7 @@ export class SidebarComponent implements OnInit {
   constructor(
     private fileService: FsUiService,
     private _snackBar: MatSnackBar,
-    public dialog: MatDialog,
-    public router: Router
+    public dialog: MatDialog
   ) {
     this.dataSource.data = TREE_DATA;
   }
@@ -156,7 +154,7 @@ export class SidebarComponent implements OnInit {
   hasChild = (_: number, node: FsNode) =>
     (!!node.children && node.children.length > 0) || node.isFolder;
 
-  // handle api subscribe error
+  // to handle api subscribe error
   private commonErrorHandler = (err: any) => {
     console.log('Error in File System Subscribe:', err.error);
     console.error(err.error.message);
@@ -241,11 +239,13 @@ export class SidebarComponent implements OnInit {
 
   /**
    * 'onRightClick' method called when
-   * the user click with the right button
+   * the mouse is on a folder or a file, and
+   * user clicks the right button of mouse.
+   * This function opens a context menu.
    * @param event MouseEvent, it contains the coordinates
-   * @param item Our data contained in the row of the table
+   * @param item Our data (object) contains info about the click
    */
-  onRightClick(event: MouseEvent, item?: any) {
+  onRightClick(event: MouseEvent, item: { folder: boolean; node: FsNode }) {
     // preventDefault avoids to show the visualization of the right-click menu of the browser
     event.preventDefault();
 
@@ -261,7 +261,14 @@ export class SidebarComponent implements OnInit {
     this.matMenuTrigger.openMenu();
   }
 
-  clickedContextMenuItem(event: any, obj: { node: FsNode; command: string }) {
+  /**
+   * 'clickedContextMenuItem' method is called when
+   * the user clicks any of the items of context menu
+   * @param obj.node contains the data of upon which 'node' the right click was done,
+   * @param obj.command tells us upon which context menu item was clicked. Based on this click command will execute.
+   * such few commands are : 'mkdir', 'mkspf', 'mktbl', 'ls', 'pwd'
+   */
+  clickedContextMenuItem(obj: { node: FsNode; command: string }) {
     const { node, command } = obj;
 
     // rename er api er command a 'ls' dewa
@@ -285,6 +292,7 @@ export class SidebarComponent implements OnInit {
     this.handleSwitchCase(command, node);
   }
 
+  // helper function for 'clickedContextMenuItem()'
   handleSwitchCase(command: string, node: FsNode) {
     switch (command) {
       case 'mkdir':
@@ -357,7 +365,13 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  clickedFiles(obj: any, node: FsNode) {
+  /**
+   * 'clickedFiles' method is called to
+   * open a sidebar 'file' to the right-side panel.
+   * @param node contains the data of
+   * upon which 'node' (in this case its a 'file') the click was done
+   */
+  clickedFiles(node: FsNode) {
     const { addTab, selected, tabs } = this.TabObjInSidebar;
 
     // console.log('obj:', obj);
@@ -388,8 +402,13 @@ export class SidebarComponent implements OnInit {
     */
   }
 
-  //   handleSwitchCase()
-
+  /**
+   * this method is called from 'handleSwitchCase()'
+   * 'openDialog' method is called to open a dialog box only
+   * it is done when the user wants to create a file or folder in the context menu
+   * @param obj.type denotes whether its a 'file' or 'folder'
+   * @param obj.name denotes the 'name' that user wants to create the file or folder
+   */
   openDialog(obj: { type: string; name: string }): void {
     const { name, type } = obj;
     console.log('type:', type);
@@ -404,6 +423,11 @@ export class SidebarComponent implements OnInit {
     console.log('closeDialog');
   }
 
+  /**
+   * 'createFolderFromDialog' method is called
+   * to make an api call (with proper parameters) to create a folder.
+   * @param obj.name denotes the 'name' that user wants to create the folder
+   */
   createFolderFromDialog(name: string) {
     console.log('createFolderFromDialog:', name);
     name = name.trim();
@@ -425,6 +449,7 @@ export class SidebarComponent implements OnInit {
     });
   }
 
+  // its a helper function to re-initialize the tree
   refreshTree() {
     //   refresh
     this.dataSource.data = [

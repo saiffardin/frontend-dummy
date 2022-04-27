@@ -4,7 +4,7 @@
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
         <!-- Files -->
         <span (contextmenu)="onRightClick($event, {folder: false, node})"
-            (click)="clickedFiles($event,node)">{{node.name}}</span>
+            (click)="clickedFiles(node)">{{node.name}}</span>
     </mat-tree-node>
 
     <!-- This is the tree node template for expandable nodes -->
@@ -51,21 +51,21 @@
 
         <!-- This 'Hide' button is created to handle the default selection -->
         <button style='display: none;' mat-menu-item
-            (click)="clickedContextMenuItem($event,{node:item.node,command:''})">Hide</button>
+            (click)="clickedContextMenuItem({node:item.node,command:''})">Hide</button>
 
         <button mat-menu-item *ngIf="item.folder"
-            (click)="clickedContextMenuItem($event,{node:item.node,command:'mkdir'})">Create Folder</button>
+            (click)="clickedContextMenuItem({node:item.node,command:'mkdir'})">Create Folder</button>
 
         <button mat-menu-item *ngIf="item.folder"
-            (click)="clickedContextMenuItem($event,{node:item.node,command:'mkspf'})">Create SOP File</button>
+            (click)="clickedContextMenuItem({node:item.node,command:'mkspf'})">Create SOP File</button>
 
         <button mat-menu-item *ngIf="item.folder"
-            (click)="clickedContextMenuItem($event,{node:item.node,command:'mktbl'})">Create Table File</button>
+            (click)="clickedContextMenuItem({node:item.node,command:'mktbl'})">Create Table File</button>
 
-        <button mat-menu-item (click)="clickedContextMenuItem($event,{node:item.node,command:'rm'})">Delete</button>
+        <button mat-menu-item (click)="clickedContextMenuItem({node:item.node,command:'rm'})">Delete</button>
 
         <!-- command for rename will change, once the API is ready -->
-        <button mat-menu-item (click)="clickedContextMenuItem($event,{node:item.node,command:'ls'})">Rename</button>
+        <button mat-menu-item (click)="clickedContextMenuItem({node:item.node,command:'ls'})">Rename</button>
     </ng-template>
 </mat-menu>
 
