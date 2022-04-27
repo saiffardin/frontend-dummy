@@ -91,8 +91,19 @@
     <div mat-dialog-actions>
         <button mat-button color="warn" [mat-dialog-close] (click)=" closeDialog()">Cancel</button>
 
-        <button mat-button [mat-dialog-close] cdkFocusInitial
-            (click)="createFolderFromDialog(dialogInput.value)">Create</button>
+        <!-- Create Folder -->
+        <button mat-button [mat-dialog-close] cdkFocusInitial *ngIf="dialogData.type==='Folder'"
+            (click)="createFolderFromDialog(dialogInput.value)">Create Folder</button>
+
+        <!-- Create SOP File -->
+        <button mat-button [mat-dialog-close] cdkFocusInitial *ngIf="dialogData.type==='SOP File'"
+            (click)="createSopFileFromDialog(dialogInput.value)">Create
+            SOP File</button>
+
+        <!-- Create Table File -->
+        <button mat-button [mat-dialog-close] cdkFocusInitial (click)="createTableFileFromDialog(dialogInput.value)"
+            *ngIf="dialogData.type==='Table File'">Create
+            Table File</button>
     </div>
 
 </ng-template>

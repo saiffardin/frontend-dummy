@@ -201,4 +201,55 @@ export class FsUiService {
     return this.http.post<any>(url, reqBody, httpOptions);
     // return new Observable((subscriber) => subscriber.complete());
   }
+
+  // cmd: mktbl
+  createTableFileAPI(fileName: string): Observable<FsNode> | any {
+    const url = `http://192.168.100.37:8080/fs`;
+
+    console.log('fileName:', fileName);
+
+    console.log('-------------------- fs service - mktbl');
+
+    const reqBody = {
+      command: 'mktbl',
+      arguments: fileName,
+    };
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    let httpOptions = {
+      headers: headers,
+    };
+
+    return this.http.post<any>(url, reqBody, httpOptions);
+    // return new Observable((subscriber) => subscriber.complete());
+  }
+
+
+   // cmd: mkspf
+   createSopFileAPI(fileName: string): Observable<FsNode> | any {
+    const url = `http://192.168.100.37:8080/fs`;
+
+    console.log('fileName:', fileName);
+
+    console.log('-------------------- fs service - mkspf');
+
+    const reqBody = {
+      command: 'mkspf',
+      arguments: fileName,
+    };
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    let httpOptions = {
+      headers: headers,
+    };
+
+    return this.http.post<any>(url, reqBody, httpOptions);
+    // return new Observable((subscriber) => subscriber.complete());
+  }
 }

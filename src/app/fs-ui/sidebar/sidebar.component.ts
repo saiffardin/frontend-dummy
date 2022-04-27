@@ -314,15 +314,37 @@ export class SidebarComponent implements OnInit {
         break;
 
       case 'mktbl':
-        console.log('switch mktbl cmd');
+        console.log('switch mktbl cmd ===', node.name);
+
+        let tblFilePath =
+          node.name === 'root' ? './' : `${node.path}/${node.name}`;
+
+        console.log('================');
+        console.log('folderPath:', tblFilePath);
+        console.log('clicked upon:', node.name);
+        console.log('================');
+
+        this.fileService.cdPathAPI(tblFilePath).subscribe((res: any) => {
+          console.log('cd mktbl', res);
+          this.openDialog({ type: 'Table File', name: node.name });
+        });
         break;
 
       case 'mkspf':
-        console.log('switch mkspf cmd');
-        break;
+        console.log('switch mkspf cmd ===', node.name);
 
-      case 'mkspf':
-        console.log('switch mkspf cmd');
+        let sopFilePath =
+          node.name === 'root' ? './' : `${node.path}/${node.name}`;
+
+        console.log('================');
+        console.log('folderPath:', sopFilePath);
+        console.log('clicked upon:', node.name);
+        console.log('================');
+
+        this.fileService.cdPathAPI(sopFilePath).subscribe((res: any) => {
+          console.log('cd mktbl', res);
+          this.openDialog({ type: 'SOP File', name: node.name });
+        });
         break;
 
       case 'rm':
@@ -449,7 +471,53 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  // its a helper function to re-initialize the tree
+  // table file create
+  createTableFileFromDialog(name: string) {
+    console.log('Files From Dialog -- name :', name);
+
+    name = name.trim();
+    // console.log('after trim:', name.length);
+
+    if (name.length === 0) {
+      this._snackBar.open('Every file must have a name.', 'STOP');
+      return;
+    }
+
+    console.log('length passed:', name.length);
+
+    // call mktbl API
+    this.fileService.createTableFileAPI(name).subscribe((res: any) => {
+      console.log('api mktbl res:', res);
+      if (res.success) {
+        this.refreshTree();
+      }
+    });
+  }
+
+  // sop file create
+  createSopFileFromDialog(name: string) {
+    console.log('Files From Dialog -- name :', name);
+
+    name = name.trim();
+    // console.log('after trim:', name.length);
+
+    if (name.length === 0) {
+      this._snackBar.open('Every file must have a name.', 'STOP');
+      return;
+    }
+
+    console.log('length passed:', name.length);
+
+    // call mktbl API
+    this.fileService.createSopFileAPI(name).subscribe((res: any) => {
+      console.log('api mkspf res:', res);
+      if (res.success) {
+        this.refreshTree();
+      }
+    });
+  }
+
+  // it's a helper function to re-initialize the tree
   refreshTree() {
     //   refresh
     this.dataSource.data = [
