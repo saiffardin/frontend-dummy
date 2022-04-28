@@ -316,6 +316,10 @@ export class SidebarComponent implements OnInit {
       case 'mkdir':
         console.log('switch mkdir cmd ===', node.name);
 
+        this.openDialogToCreate({ type: 'Folder', node });
+
+        // **********************************
+        /*
         let folderPath =
           node.name === 'root' ? './' : `${node.path}/${node.name}`;
 
@@ -328,6 +332,9 @@ export class SidebarComponent implements OnInit {
           console.log('cd mkdir', res);
           this.openDialog({ type: 'Folder', name: node.name });
         });
+        */
+
+        // **********************************
 
         break;
 
@@ -446,6 +453,29 @@ export class SidebarComponent implements OnInit {
     this.dialogData.name = name;
 
     this.dialog.open(this.dialogRefHtml);
+  }
+
+  //   *******************************
+  openDialogToCreate(obj: { type: string; node: FsNode }): void {
+    const { type, node } = obj;
+    console.log('%csaif type:', 'color:red', type);
+    console.log('%csaif node:', 'color:red', node);
+
+    let folderPath = node.name === 'root' ? './' : `${node.path}/${node.name}`;
+
+    console.log('================');
+    console.log('folderPath:', folderPath);
+    console.log('clicked upon:', node.name);
+    console.log('================');
+
+    this.fileService.cdPathAPI(folderPath).subscribe((res: any) => {
+      console.log('cd mkdir', res);
+      //   this.openDialog({ type: 'Folder', name: node.name });
+      this.dialogData.type = type;
+      this.dialogData.name = node.name;
+
+      this.dialog.open(this.dialogRefHtml);
+    });
   }
 
   closeDialog() {
