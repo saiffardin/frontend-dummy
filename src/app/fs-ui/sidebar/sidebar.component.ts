@@ -333,13 +333,14 @@ export class SidebarComponent implements OnInit {
       case 'rm':
         console.log('switch rm cmd');
 
-        let parentPath: string = node.path!;
-        console.log('parentPath:', parentPath);
+        // let parentPath: string = node.path!;
+        let parentPath: string = node.path === 'root' ? './' : node.path!;
+        // console.log('parentPath:', parentPath);
 
         this.fileService.cdPathAPI(parentPath).subscribe((data: any) => {
           //   console.log('cdPathAPI:', data);
 
-          console.log(`id - ${node.id}`);
+          //   console.log(`id - ${node.id}`);
           console.log(`clicked - ${node.name}`);
 
           //   console.log('dataSource:', this.dataSource.data);
@@ -351,10 +352,6 @@ export class SidebarComponent implements OnInit {
               //   refresh
               this.refreshTree();
             }
-
-            // after delete
-            // console.log('after delete dataSource:', this.dataSource.data);
-            // console.log('after delete TREE_DATA:', TREE_DATA);
           });
         });
 
