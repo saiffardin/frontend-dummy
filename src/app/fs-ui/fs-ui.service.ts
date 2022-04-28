@@ -9,42 +9,6 @@ import { FsNode } from './FsNode';
 export class FsUiService {
   constructor(private http: HttpClient) {}
 
-  // cmd: cd
-  changeDirAPI(node: FsNode): Observable<FsNode> | any {
-    let nodeName = node.name;
-    let extension = node.extension;
-    let path = '';
-
-    console.log('node:', node);
-
-    const url = `http://192.168.100.37:8080/fs`;
-
-    if (extension === '.dir') {
-      path = nodeName === 'root' ? './' : `${node.path}/${nodeName}`;
-    } else {
-      path = node.path!;
-    }
-
-    console.log('path in arg:', path);
-
-    console.log('-------------------- cd');
-
-    const reqBody = {
-      command: 'cd',
-      arguments: path,
-    };
-
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    let httpOptions = {
-      headers: headers,
-    };
-
-    return this.http.post<any>(url, reqBody, httpOptions);
-  }
-
   // cmd: cd (path)
   cdPathAPI(path: string): Observable<FsNode> | any {
     const url = `http://192.168.100.37:8080/fs`;

@@ -160,6 +160,7 @@ export class SidebarComponent implements OnInit {
     console.error(err.error.message);
   };
 
+  //  helper function -- called from 'showChildren' method
   buildChildrenArrayFromResponse(obj: { node: FsNode; data: any[] }) {
     // console.log('buildChildrenArrayFromResponse -- obj:', obj);
 
