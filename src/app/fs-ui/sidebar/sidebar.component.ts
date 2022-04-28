@@ -396,24 +396,6 @@ export class SidebarComponent implements OnInit {
     // then enter table => use 'cmdEnterTableApi()'
   }
 
-  /**
-   * this method is called from 'handleSwitchCase()'
-   * 'openDialog' method is called to open a dialog box only
-   * it is done when the user wants to create a file or folder in the context menu
-   * @param obj.type denotes whether its a 'file' or 'folder'
-   * @param obj.name denotes the 'name' that user wants to create the file or folder
-   */
-  openDialog(obj: { type: string; name: string }): void {
-    const { name, type } = obj;
-    console.log('type:', type);
-
-    this.dialogData.type = type;
-    this.dialogData.name = name;
-
-    this.dialog.open(this.dialogRefHtml);
-  }
-
-  //   *******************************
   openDialogToCreate(obj: {
     type: string;
     node: FsNode;
@@ -433,7 +415,7 @@ export class SidebarComponent implements OnInit {
 
     this.fileService.cdPathAPI(path).subscribe((res: any) => {
       console.log('cd mkdir', res);
-      
+
       this.dialogData.type = type;
       this.dialogData.name = node.name;
 
