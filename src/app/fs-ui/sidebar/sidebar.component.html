@@ -25,7 +25,7 @@
 
 
             <!-- Folder Name -->
-            <span class="treeNodes" (contextmenu)="onRightClick($event, {folder: true, node})">{{node.name}}</span>
+            <span (contextmenu)="onRightClick($event, {folder: true, node})">{{node.name}}</span>
         </div>
         <!-- There is inline padding applied to this div using styles.
             This padding value depends on the mat-icon-button width.  -->

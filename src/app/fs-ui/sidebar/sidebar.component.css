@@ -37,7 +37,7 @@
 }
 
 .mat-tree-node{
-    border: 1px solid black;
+    /* border: 1px solid black; */
     padding-right: 10px ;
 }
 
@@ -49,6 +49,6 @@
     
 }
 
-/* .treeNodes:hover {
-    background-color: yellow;
-} */
+.treeNodes:hover {
+    background-color: rgba(211, 211, 211, 0.39);
+}
