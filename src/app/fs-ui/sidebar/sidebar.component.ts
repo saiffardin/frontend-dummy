@@ -161,7 +161,7 @@ export class SidebarComponent implements OnInit {
   };
 
   buildChildrenArrayFromResponse(obj: { node: FsNode; data: any[] }) {
-    console.log('buildChildrenArrayFromResponse -- obj:', obj);
+    // console.log('buildChildrenArrayFromResponse -- obj:', obj);
 
     const { node, data } = obj;
 
@@ -176,7 +176,7 @@ export class SidebarComponent implements OnInit {
       let children: FsNode[] = [];
       let isFolder: boolean = child.extension === '.dir' ? true : false;
 
-      console.log('%cbefore path:', 'color:blue', path);
+      //   console.log('%cbefore path:', 'color:blue', path);
 
       if (path[0] === '/') {
         path = path.substring(1);
@@ -184,7 +184,7 @@ export class SidebarComponent implements OnInit {
 
       //   console.log('------------------');
       //   console.log('child:', child);
-      console.log('%cafter path:', 'color:blue', path);
+      //   console.log('%cafter path:', 'color:blue', path);
       //   console.log('children:', children);
       //   console.log('isFolder:', isFolder);
 
@@ -226,116 +226,23 @@ export class SidebarComponent implements OnInit {
 
     let { name, path, children, isFolder, extension } = node;
 
-    console.log('show children extension:', extension);
-    console.log('show children name:', name);
-    console.log('%cbefore path:', 'color:red', path);
-
     path = name === 'root' ? './' : `${path}/${name}`;
 
-    console.log('%cafter path:', 'color:red', path);
-
-    /*
-    this.fileService.changeDirAPI(node).subscribe((data: any) => {
-      console.log('data:', data);
-
-      this.fileService.cmdListApi().subscribe((res: any) => {
-        console.log('res:', res);
-        // console.log(res.data);
-
-        node.children = res.data.map((child: any) => {
-          
-            // path;
-            // children;
-            // isFolder?: boolean;
-            
-
-          let path: string = `${node.path}/${node.name}`;
-          let children: FsNode[] = [];
-          let isFolder: boolean = child.extension === '.dir' ? true : false;
-
-          if (path[0] === '/') {
-            path = path.substring(1);
-          }
-
-          //   console.log('------------------');
-          //   console.log('child:', child);
-          //   console.log('path:', path);
-          //   console.log('children:', children);
-          //   console.log('isFolder:', isFolder);
-
-          return {
-            ...child,
-            path,
-            children,
-            isFolder,
-          };
-        });
-
-        // console.log('===============');
-
-        // console.log('node:', node);
-
-        // the following 3 lines were done to render tree upon data change
-        const data = this.dataSource.data;
-        this.dataSource.data = null!;
-        this.dataSource.data = data;
-
-        // console.log('this.dataSource:', this.dataSource.data);
-      }, this.commonErrorHandler);
-    }, this.commonErrorHandler);
-    */
-
-    // **********************************************
+    // console.log('%cafter path:', 'color:red', path);
 
     this.fileService.cdPathAPI(path).subscribe((data: any) => {
-      console.log('data:', data);
+      console.log('cd - data:', data);
 
       this.fileService.cmdListApi().subscribe((res: any) => {
-        console.log('res:', res);
-        console.log('%cpath:', 'color:violet', path);
+        console.log('ls - res:', res);
         // console.log(res.data);
-
-        /*
-        node.children = res.data.map((child: any) => {
-          // these are missing in 'child'
-          //   path;
-          //   children;
-          //   isFolder?: boolean;
-
-          let path: string = `${node.path}/${node.name}`;
-
-          let children: FsNode[] = [];
-          let isFolder: boolean = child.extension === '.dir' ? true : false;
-
-          console.log('%cbefore path:', 'color:blue', path);
-
-          if (path[0] === '/') {
-            path = path.substring(1);
-          }
-
-          //   console.log('------------------');
-          //   console.log('child:', child);
-          console.log('%cafter path:', 'color:blue', path);
-          //   console.log('children:', children);
-          //   console.log('isFolder:', isFolder);
-
-          return {
-            ...child,
-            path,
-            children,
-            isFolder,
-          };
-        });
-        */
 
         node.children = this.buildChildrenArrayFromResponse({
           node,
           data: res.data,
         });
 
-        // console.log('===============');
-
-        // console.log('node:', node);
+        console.log('======================');
 
         // the following 3 lines were done to render tree upon data change
         const data = this.dataSource.data;
@@ -345,8 +252,6 @@ export class SidebarComponent implements OnInit {
         // console.log('this.dataSource:', this.dataSource.data);
       }, this.commonErrorHandler);
     }, this.commonErrorHandler);
-
-    // **********************************************
   }
 
   /**
@@ -521,19 +426,8 @@ export class SidebarComponent implements OnInit {
     addTab({ node, tabs, selected });
     // addTab({ node, tabs, selected, tabContent: result.data });
 
-    /*
-    this.fileService.changeDirAPI(node).subscribe((data: any) => {
-      console.log('data:', data);
-      this.fileService.cmdEnterTableApi(node).subscribe((res: any) => {
-        console.log('entbl res:', res);
-        if (res.success) {
-            this.fileService.cmdDescribeApi().subscribe((result: any) => {
-            console.log('describe : ', result);
-          });
-        }
-      });
-    });
-    */
+    // run cd
+    // then enter table => use 'cmdEnterTableApi()'
   }
 
   /**
