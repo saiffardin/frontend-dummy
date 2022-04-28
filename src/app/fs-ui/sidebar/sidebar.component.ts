@@ -318,24 +318,6 @@ export class SidebarComponent implements OnInit {
 
         this.openDialogToCreate({ type: 'Folder', node });
 
-        // **********************************
-        /*
-        let folderPath =
-          node.name === 'root' ? './' : `${node.path}/${node.name}`;
-
-        console.log('================');
-        console.log('folderPath:', folderPath);
-        console.log('clicked upon:', node.name);
-        console.log('================');
-
-        this.fileService.cdPathAPI(folderPath).subscribe((res: any) => {
-          console.log('cd mkdir', res);
-          this.openDialog({ type: 'Folder', name: node.name });
-        });
-        */
-
-        // **********************************
-
         break;
 
       case 'mktbl':
