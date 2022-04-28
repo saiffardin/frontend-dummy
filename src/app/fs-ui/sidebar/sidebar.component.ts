@@ -316,42 +316,18 @@ export class SidebarComponent implements OnInit {
       case 'mkdir':
         console.log('switch mkdir cmd ===', node.name);
 
-        this.openDialogToCreate({ type: 'Folder', node });
-
+        this.openDialogToCreate({ type: 'Folder', node, command });
         break;
 
       case 'mktbl':
         console.log('switch mktbl cmd ===', node.name);
 
-        let tblFilePath =
-          node.name === 'root' ? './' : `${node.path}/${node.name}`;
-
-        console.log('================');
-        console.log('folderPath:', tblFilePath);
-        console.log('clicked upon:', node.name);
-        console.log('================');
-
-        this.fileService.cdPathAPI(tblFilePath).subscribe((res: any) => {
-          console.log('cd mktbl', res);
-          this.openDialog({ type: 'Table File', name: node.name });
-        });
+        this.openDialogToCreate({ type: 'Table File', node, command });
         break;
 
       case 'mkspf':
         console.log('switch mkspf cmd ===', node.name);
-
-        let sopFilePath =
-          node.name === 'root' ? './' : `${node.path}/${node.name}`;
-
-        console.log('================');
-        console.log('folderPath:', sopFilePath);
-        console.log('clicked upon:', node.name);
-        console.log('================');
-
-        this.fileService.cdPathAPI(sopFilePath).subscribe((res: any) => {
-          console.log('cd mktbl', res);
-          this.openDialog({ type: 'SOP File', name: node.name });
-        });
+        this.openDialogToCreate({ type: 'SOP File', node, command });
         break;
 
       case 'rm':
@@ -438,23 +414,30 @@ export class SidebarComponent implements OnInit {
   }
 
   //   *******************************
-  openDialogToCreate(obj: { type: string; node: FsNode }): void {
-    const { type, node } = obj;
+  openDialogToCreate(obj: {
+    type: string;
+    node: FsNode;
+    command: string;
+  }): void {
+    const { type, node, command } = obj;
     console.log('%csaif type:', 'color:red', type);
     console.log('%csaif node:', 'color:red', node);
+    console.log('%csaif command:', 'color:red', command);
 
-    let folderPath = node.name === 'root' ? './' : `${node.path}/${node.name}`;
+    let path = node.name === 'root' ? './' : `${node.path}/${node.name}`;
 
     console.log('================');
-    console.log('folderPath:', folderPath);
+    console.log('folderPath:', path);
     console.log('clicked upon:', node.name);
     console.log('================');
 
-    this.fileService.cdPathAPI(folderPath).subscribe((res: any) => {
+    this.fileService.cdPathAPI(path).subscribe((res: any) => {
       console.log('cd mkdir', res);
-      //   this.openDialog({ type: 'Folder', name: node.name });
+      
       this.dialogData.type = type;
       this.dialogData.name = node.name;
+
+      // in future we can also pass 'command' to do more refactoring
 
       this.dialog.open(this.dialogRefHtml);
     });
