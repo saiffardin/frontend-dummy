@@ -396,6 +396,16 @@ export class SidebarComponent implements OnInit {
     // then enter table => use 'cmdEnterTableApi()'
   }
 
+  /**
+   * this method is called from 'handleSwitchCase()'
+   * 'openDialogToCreate' method is called to open a dialog box only
+   * it is done when the user wants to create a file or folder in the context menu
+   * @param obj.type denotes what kind of file or folder it is
+   * @param obj.node denotes the node in the tree
+   * @param obj.command denotes the command
+   * commands can be: 'mkdir', 'mkspf' , 'mktbl'
+   */
+
   openDialogToCreate(obj: {
     type: string;
     node: FsNode;
