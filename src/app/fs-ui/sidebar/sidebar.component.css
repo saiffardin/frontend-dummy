@@ -36,6 +36,19 @@
 	outline: inherit;
 }
 
+.mat-tree-node{
+    border: 1px solid black;
+    padding-right: 10px ;
+}
+
 .mat-tree-node span{
     cursor: help;
+}  
+
+.treeNodes{
+    
 }
+
+/* .treeNodes:hover {
+    background-color: yellow;
+} */

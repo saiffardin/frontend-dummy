@@ -402,7 +402,6 @@ export class SidebarComponent implements OnInit {
    * @param obj.command denotes the command
    * commands can be: 'mkdir', 'mkspf' , 'mktbl'
    */
-
   openDialogToCreate(obj: {
     type: string;
     node: FsNode;
