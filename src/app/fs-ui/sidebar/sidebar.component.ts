@@ -160,6 +160,45 @@ export class SidebarComponent implements OnInit {
     console.error(err.error.message);
   };
 
+  buildChildrenArrayFromResponse(obj: { node: FsNode; data: any[] }) {
+    console.log('buildChildrenArrayFromResponse -- obj:', obj);
+
+    const { node, data } = obj;
+
+    let childrenArray = data.map((child: any) => {
+      // these are missing in 'child'
+      //   path;
+      //   children;
+      //   isFolder?: boolean;
+
+      let path: string = `${node.path}/${node.name}`;
+
+      let children: FsNode[] = [];
+      let isFolder: boolean = child.extension === '.dir' ? true : false;
+
+      console.log('%cbefore path:', 'color:blue', path);
+
+      if (path[0] === '/') {
+        path = path.substring(1);
+      }
+
+      //   console.log('------------------');
+      //   console.log('child:', child);
+      console.log('%cafter path:', 'color:blue', path);
+      //   console.log('children:', children);
+      //   console.log('isFolder:', isFolder);
+
+      return {
+        ...child,
+        path,
+        children,
+        isFolder,
+      };
+    });
+
+    return childrenArray;
+  }
+
   /**
    * 'showChildren' method is called when
    * the user clicks the 'left-side-icon' of any folder on the sidebar
@@ -195,6 +234,7 @@ export class SidebarComponent implements OnInit {
 
     console.log('%cafter path:', 'color:red', path);
 
+    /*
     this.fileService.changeDirAPI(node).subscribe((data: any) => {
       console.log('data:', data);
 
@@ -203,11 +243,11 @@ export class SidebarComponent implements OnInit {
         // console.log(res.data);
 
         node.children = res.data.map((child: any) => {
-          /*
-            path;
-            children;
-            isFolder?: boolean;
-            */
+          
+            // path;
+            // children;
+            // isFolder?: boolean;
+            
 
           let path: string = `${node.path}/${node.name}`;
           let children: FsNode[] = [];
@@ -243,6 +283,70 @@ export class SidebarComponent implements OnInit {
         // console.log('this.dataSource:', this.dataSource.data);
       }, this.commonErrorHandler);
     }, this.commonErrorHandler);
+    */
+
+    // **********************************************
+
+    this.fileService.cdPathAPI(path).subscribe((data: any) => {
+      console.log('data:', data);
+
+      this.fileService.cmdListApi().subscribe((res: any) => {
+        console.log('res:', res);
+        console.log('%cpath:', 'color:violet', path);
+        // console.log(res.data);
+
+        /*
+        node.children = res.data.map((child: any) => {
+          // these are missing in 'child'
+          //   path;
+          //   children;
+          //   isFolder?: boolean;
+
+          let path: string = `${node.path}/${node.name}`;
+
+          let children: FsNode[] = [];
+          let isFolder: boolean = child.extension === '.dir' ? true : false;
+
+          console.log('%cbefore path:', 'color:blue', path);
+
+          if (path[0] === '/') {
+            path = path.substring(1);
+          }
+
+          //   console.log('------------------');
+          //   console.log('child:', child);
+          console.log('%cafter path:', 'color:blue', path);
+          //   console.log('children:', children);
+          //   console.log('isFolder:', isFolder);
+
+          return {
+            ...child,
+            path,
+            children,
+            isFolder,
+          };
+        });
+        */
+
+        node.children = this.buildChildrenArrayFromResponse({
+          node,
+          data: res.data,
+        });
+
+        // console.log('===============');
+
+        // console.log('node:', node);
+
+        // the following 3 lines were done to render tree upon data change
+        const data = this.dataSource.data;
+        this.dataSource.data = null!;
+        this.dataSource.data = data;
+
+        // console.log('this.dataSource:', this.dataSource.data);
+      }, this.commonErrorHandler);
+    }, this.commonErrorHandler);
+
+    // **********************************************
   }
 
   /**

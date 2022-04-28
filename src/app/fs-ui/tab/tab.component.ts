@@ -55,22 +55,7 @@ export class TabComponent implements AfterViewInit {
       selected.setValue(tabs.length - 1);
     }
 
-    // calling api to enter the table
-    // and getting the content out of it
-    // this piece of code will switch to sidebar
-    /*
-    fileService.changeDirAPI(node).subscribe((data: any) => {
-      console.log('data:', data);
-      fileService.cmdEnterTableApi(node).subscribe((res: any) => {
-        console.log('entbl res:', res);
-        if (res.success) {
-          fileService.cmdDescribeApi().subscribe((result: any) => {
-            console.log('describe : ', result);
-          });
-        }
-      });
-    });
-    */
+    
   }
 
   removeTab(index: number) {
