@@ -8,7 +8,7 @@ import { FormControl } from '@angular/forms';
 })
 export class TabComponent implements AfterViewInit {
   //   tabs: any[] = ['First'];
-  tabs: any[] = [{ name: 'First', content: '' }];
+  tabs: any[] = [{ name: 'First', content: '', path: '' }];
 
   selected = new FormControl(0);
 
@@ -49,13 +49,11 @@ export class TabComponent implements AfterViewInit {
       return;
     } else {
       // ekhane jei naam dibo she name tab create hobe
-      tabs.push({ name: tabTitle, content: tabContent });
+      tabs.push({ name: tabTitle, content: tabContent, path: `${node.path}` });
 
       //whenever a new tab is created, go to that tab
       selected.setValue(tabs.length - 1);
     }
-
-    
   }
 
   removeTab(index: number) {

@@ -53,3 +53,7 @@
 .treeNodes:hover {
     background-color: rgba(211, 211, 211, 0.39);
 }
+
+.treeNodes:active {
+    background-color: rgba(211, 211, 211, 0.39);
+}

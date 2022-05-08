@@ -3,10 +3,10 @@
     <!-- There is inline padding applied to this node using styles.-->
     <!---->
 
-    <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle class="treeNodes" (click)="clickedFiles(node)">
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle class="treeNodes" (click)="clickedFiles(node)"
+        matTooltip="{{node.path}}/{{node.name}}" [matTooltipShowDelay]="1000">
         <!-- Files -->
-        <span (contextmenu)="onRightClick($event, {folder: false, node})" matTooltip="{{node.path}}/{{node.name}}"
-            [matTooltipShowDelay]="1000">{{node.name}}</span>
+        <span (contextmenu)="onRightClick($event, {folder: false, node})">{{node.name}}</span>
     </mat-tree-node>
 
     <!-- This is the tree node template for expandable nodes -->
