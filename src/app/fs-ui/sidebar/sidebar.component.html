@@ -5,12 +5,15 @@
 
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle class="treeNodes" (click)="clickedFiles(node)">
         <!-- Files -->
-        <span (contextmenu)="onRightClick($event, {folder: false, node})">{{node.name}}</span>
+        <span (contextmenu)="onRightClick($event, {folder: false, node})" matTooltip="{{node.path}}/{{node.name}}"
+            [matTooltipShowDelay]="1000">{{node.name}}</span>
     </mat-tree-node>
 
     <!-- This is the tree node template for expandable nodes -->
     <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-        <div class="mat-tree-node treeNodes" (click)="showChildren($event,node)"  matTreeNodeToggle (contextmenu)="onRightClick($event, {folder: true, node})">
+        <div class="mat-tree-node treeNodes" (click)="showChildren($event,node)" matTreeNodeToggle
+            (contextmenu)="onRightClick($event, {folder: true, node})"
+            matTooltip="{{node.name === 'root' ? 'root' : node.path+'/'+node.name}}" [matTooltipShowDelay]="1000">
             <!-- ************************************************************************************************* -->
             <button mat-icon-button [attr.aria-label]="'Toggle ' + node.name" class="saif-fixing ">
                 <mat-icon class="mat-icon-rtl-mirror ">
@@ -20,7 +23,7 @@
             <!-- ************************************************************************************************* -->
 
             <!-- Folder Name -->
-            <span >{{node.name}}</span>
+            <span>{{node.name}}</span>
         </div>
         <!-- There is inline padding applied to this div using styles.
             This padding value depends on the mat-icon-button width.  -->
