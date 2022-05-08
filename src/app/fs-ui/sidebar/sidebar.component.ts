@@ -126,6 +126,7 @@ let TREE_DATA: FsNode[] = [
 export class SidebarComponent implements OnInit {
   @Input() TabObjInSidebar!: any;
   @ViewChild('dialogRefHtml') dialogRefHtml!: TemplateRef<any>;
+  @ViewChild('confirmDeleteRefHtml') confirmDeleteRefHtml!: TemplateRef<any>;
 
   constructor(
     private fileService: FsUiService,
@@ -349,14 +350,7 @@ export class SidebarComponent implements OnInit {
 
           //   console.log('dataSource:', this.dataSource.data);
 
-          this.fileService.removeAPI(node).subscribe((data: any) => {
-            console.log('response from remove API:', data);
-
-            if (data.success) {
-              //   refresh
-              this.refreshTree();
-            }
-          });
+          this.dialog.open(this.confirmDeleteRefHtml, { data: node });
         });
 
         break;
@@ -533,5 +527,23 @@ export class SidebarComponent implements OnInit {
         extension: '.dir',
       },
     ];
+  }
+
+  onDismissDelete() {
+    console.log('onDismissDelete');
+    this._snackBar.open('Delete operation is cancelled', 'OK');
+  }
+
+  onConfirmDelete(node: any) {
+    console.log('onConfirmDelete:', node);
+
+    this.fileService.removeAPI(node).subscribe((data: any) => {
+      console.log('response from remove API:', data);
+
+      if (data.success) {
+        //   refresh
+        this.refreshTree();
+      }
+    });
   }
 }
