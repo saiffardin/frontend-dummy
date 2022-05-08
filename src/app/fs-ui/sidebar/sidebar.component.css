@@ -41,8 +41,9 @@
     padding-right: 10px ;
 }
 
-.mat-tree-node span{
-    cursor: help;
+.mat-tree-node{
+    /* cursor: help; */
+    cursor: pointer;
 }  
 
 .treeNodes{

@@ -200,6 +200,10 @@ export class SidebarComponent implements OnInit {
     return childrenArray;
   }
 
+  dummyClick() {
+    console.log('dummyClick');
+  }
+
   /**
    * 'showChildren' method is called when
    * the user clicks the 'left-side-icon' of any folder on the sidebar
