@@ -13,7 +13,7 @@ export class TabComponent implements AfterViewInit {
   selected = new FormControl(0);
 
   ngAfterViewInit() {
-    console.log('AfterViewInit');
+    // console.log('AfterViewInit');
 
     setTimeout(() => {
       this.fileEmitterFromTab.emit({
@@ -29,17 +29,17 @@ export class TabComponent implements AfterViewInit {
   constructor() {}
 
   addTab(obj?: any) {
-    console.log('obj:', obj);
+    // console.log('obj:', obj);
 
     const { node, tabs, selected, tabContent } = obj;
 
     // console.log('node:', node);
     // console.log('tabs:', tabs);
     // console.log('selected:', selected);
-    console.log('tabContent:', tabContent);
+    // console.log('tabContent:', tabContent);
 
     const tabTitle = node.name;
-    console.log('tabTitle:', tabTitle);
+    // console.log('tabTitle:', tabTitle);
 
     const allTabsName = tabs.map((tab: any) => tab.name);
 
@@ -61,7 +61,7 @@ export class TabComponent implements AfterViewInit {
   }
 
   iconClicked(index: number) {
-    console.log('icon clicked');
+    // console.log('icon clicked');
     this.tabs.splice(index, 1);
   }
 }

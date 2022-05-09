@@ -13,7 +13,7 @@ export class FsUiService {
   cdPathAPI(path: string): Observable<FsNode> | any {
     const url = `http://192.168.100.37:8080/fs`;
 
-    console.log('fs service || param path in cd:', path);
+    // console.log('fs service || param path in cd:', path);
 
     // path = path === 'root' ? './' : path;
 
@@ -76,7 +76,7 @@ export class FsUiService {
   // cmd: entbl
   cmdEnterTableApi(node: FsNode): Observable<FsNode> | any {
     const url = `http://192.168.100.37:8080/fs`;
-    console.log('entbl node:', node.name);
+    // console.log('entbl node:', node.name);
 
     const reqBody = {
       command: 'entbl',
@@ -118,11 +118,11 @@ export class FsUiService {
   removeAPI(node: FsNode): Observable<FsNode> | any {
     const url = `http://192.168.100.37:8080/fs`;
 
-    console.log('node:', node);
+    // console.log('node:', node);
 
     const { children, extension, isFolder, name, path } = node;
 
-    console.log('-------------------- fs service - rm');
+    // console.log('-------------------- fs service - rm');
 
     const reqBody = {
       command: 'rm',
@@ -145,9 +145,9 @@ export class FsUiService {
   createFolderAPI(folderName: string): Observable<FsNode> | any {
     const url = `http://192.168.100.37:8080/fs`;
 
-    console.log('folderName:', folderName);
+    // console.log('folderName:', folderName);
 
-    console.log('-------------------- fs service - mkdir');
+    // console.log('-------------------- fs service - mkdir');
 
     const reqBody = {
       command: 'mkdir',
@@ -170,9 +170,9 @@ export class FsUiService {
   createTableFileAPI(fileName: string): Observable<FsNode> | any {
     const url = `http://192.168.100.37:8080/fs`;
 
-    console.log('fileName:', fileName);
+    // console.log('fileName:', fileName);
 
-    console.log('-------------------- fs service - mktbl');
+    // console.log('-------------------- fs service - mktbl');
 
     const reqBody = {
       command: 'mktbl',
@@ -195,9 +195,9 @@ export class FsUiService {
   createSopFileAPI(fileName: string): Observable<FsNode> | any {
     const url = `http://192.168.100.37:8080/fs`;
 
-    console.log('fileName:', fileName);
+    // console.log('fileName:', fileName);
 
-    console.log('-------------------- fs service - mkspf');
+    // console.log('-------------------- fs service - mkspf');
 
     const reqBody = {
       command: 'mkspf',

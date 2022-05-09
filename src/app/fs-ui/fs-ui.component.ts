@@ -15,7 +15,7 @@ export class FsUiComponent implements OnInit {
     console.log('captureAddTabInFsUi: ', obj);
     this.TabObjInFsUi = obj;
 
-    console.log('this.TabObjInFsUi :', this.TabObjInFsUi);
+    // console.log('this.TabObjInFsUi :', this.TabObjInFsUi);
     console.log('----------------------------');
   }
 }
