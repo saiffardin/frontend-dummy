@@ -236,7 +236,7 @@ export class SidebarComponent implements OnInit {
       //   console.log('cd - data:', data);
 
       this.fileService.cmdListApi().subscribe((res: any) => {
-        // console.log('ls - res:', res);
+        console.log('ls - res:', res);
         // console.log(res.data);
 
         node.children = this.buildChildrenArrayFromResponse({
@@ -251,7 +251,7 @@ export class SidebarComponent implements OnInit {
         this.dataSource.data = null!;
         this.dataSource.data = data;
 
-        // console.log('this.dataSource:', this.dataSource.data);
+        console.log('this.dataSource:', this.dataSource.data);
       }, this.commonErrorHandler);
     }, this.commonErrorHandler);
   }
@@ -334,8 +334,12 @@ export class SidebarComponent implements OnInit {
 
         // let parentPath: string = node.path!;
         let parentPath: string = node.path === 'root' ? './' : node.path!;
+        console.log('node:', node);
         // console.log('parentPath:', parentPath);
 
+        this.collapseParentFolder(parentPath);
+
+        /*
         this.fileService.cdPathAPI(parentPath).subscribe((data: any) => {
           //   console.log('cdPathAPI:', data);
 
@@ -346,6 +350,7 @@ export class SidebarComponent implements OnInit {
 
           this.dialog.open(this.confirmDeleteRefHtml, { data: node });
         });
+        */
 
         break;
 
@@ -357,6 +362,32 @@ export class SidebarComponent implements OnInit {
         console.error('No such command exists!');
         break;
     }
+  }
+
+  collapseParentFolder(path: any) {
+    console.log('collapseParentFolder : ', path);
+    // console.log('this.dataSource.data[0]:', this.dataSource.data[0]);
+
+    let pathArr: any[] = path.split('/');
+    let node: FsNode = this.dataSource.data[0];
+    let nodeChildren: FsNode[];
+
+    console.log('pathArr:', pathArr);
+    console.log('node:', node);
+
+    pathArr.forEach((path) => {
+      if (path !== 'root') {
+        // console.log('path:', path);
+        nodeChildren = node.children!;
+        node = nodeChildren.find((n) => n.name === path)!;
+        console.log('first - ', node);
+      }
+    });
+
+    // console.log('this.dataSource.data[0]:', this.dataSource.data[0]);
+
+    this.treeControl.collapse(node);
+    node.children = [];
   }
 
   /**
@@ -412,7 +443,7 @@ export class SidebarComponent implements OnInit {
     // console.log('================');
 
     this.fileService.cdPathAPI(path).subscribe((res: any) => {
-    //   console.log('cd mkdir', res);
+      //   console.log('cd mkdir', res);
 
       this.dialogData.type = type;
       this.dialogData.name = node.name;
@@ -446,7 +477,7 @@ export class SidebarComponent implements OnInit {
 
     // call mkdir API
     this.fileService.createFolderAPI(name).subscribe((res: any) => {
-    //   console.log('api mkdir res:', res);
+      //   console.log('api mkdir res:', res);
       if (res.success) {
         this.refreshTree();
       }
@@ -469,7 +500,7 @@ export class SidebarComponent implements OnInit {
 
     // call mktbl API
     this.fileService.createTableFileAPI(name).subscribe((res: any) => {
-    //   console.log('api mktbl res:', res);
+      //   console.log('api mktbl res:', res);
       if (res.success) {
         this.refreshTree();
       }
@@ -492,7 +523,7 @@ export class SidebarComponent implements OnInit {
 
     // call mktbl API
     this.fileService.createSopFileAPI(name).subscribe((res: any) => {
-    //   console.log('api mkspf res:', res);
+      //   console.log('api mkspf res:', res);
       if (res.success) {
         this.refreshTree();
       }
@@ -532,7 +563,7 @@ export class SidebarComponent implements OnInit {
     // console.log('onConfirmDelete:', node);
 
     this.fileService.removeAPI(node).subscribe((data: any) => {
-    //   console.log('response from remove API:', data);
+      //   console.log('response from remove API:', data);
 
       if (data.success) {
         //   refresh
