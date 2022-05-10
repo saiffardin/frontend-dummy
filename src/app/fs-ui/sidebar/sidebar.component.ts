@@ -536,30 +536,6 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  // it's a helper function to re-initialize the tree
-  refreshTree() {
-    //   refresh
-    this.dataSource.data = [
-      {
-        name: 'root',
-        children: [],
-        path: '',
-        isFolder: true,
-        extension: '.dir',
-      },
-    ];
-
-    TREE_DATA = [
-      {
-        name: 'root',
-        children: [],
-        path: '',
-        isFolder: true,
-        extension: '.dir',
-      },
-    ];
-  }
-
   onDismissDelete() {
     // console.log('onDismissDelete');
     this._snackBar.open('Delete operation is cancelled', 'OK');
