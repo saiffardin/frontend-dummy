@@ -67,7 +67,7 @@
 
 
 <!-- dialog -->
-<ng-template #dialogRefHtml>
+<ng-template #dialogRefHtml let-data>
 
     <h1 mat-dialog-title>Create {{dialogData.type}}</h1>
 
@@ -89,15 +89,15 @@
 
         <!-- Create Folder -->
         <button mat-button [mat-dialog-close] cdkFocusInitial *ngIf="dialogData.type==='Folder'"
-            (click)="createFolderFromDialog(dialogInput.value)">Create Folder</button>
+            (click)="createFolderFromDialog(dialogInput.value,data)">Create Folder</button>
 
         <!-- Create SOP File -->
         <button mat-button [mat-dialog-close] cdkFocusInitial *ngIf="dialogData.type==='SOP File'"
-            (click)="createSopFileFromDialog(dialogInput.value)">Create
+            (click)="createSopFileFromDialog(dialogInput.value,data)">Create
             SOP File</button>
 
         <!-- Create Table File -->
-        <button mat-button [mat-dialog-close] cdkFocusInitial (click)="createTableFileFromDialog(dialogInput.value)"
+        <button mat-button [mat-dialog-close] cdkFocusInitial (click)="createTableFileFromDialog(dialogInput.value,data)"
             *ngIf="dialogData.type==='Table File'">Create
             Table File</button>
     </div>

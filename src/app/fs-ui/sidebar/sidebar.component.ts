@@ -371,6 +371,13 @@ export class SidebarComponent implements OnInit {
     console.log('pathArr:', pathArr);
     console.log('node:', node);
 
+    // if the folder is 'root'
+    if (pathArr[0] === '') {
+      this.treeControl.collapse(node);
+      node.children = [];
+      return;
+    }
+
     pathArr.forEach((path) => {
       if (path !== 'root') {
         // console.log('path:', path);
@@ -446,7 +453,7 @@ export class SidebarComponent implements OnInit {
 
       // in future we can also pass 'command' to do more refactoring
 
-      this.dialog.open(this.dialogRefHtml);
+      this.dialog.open(this.dialogRefHtml, { data: node });
     });
   }
 
@@ -459,7 +466,7 @@ export class SidebarComponent implements OnInit {
    * to make an api call (with proper parameters) to create a folder.
    * @param name denotes the 'name' that user wants to create the folder
    */
-  createFolderFromDialog(name: string) {
+  createFolderFromDialog(name: string, node: FsNode) {
     // console.log('createFolderFromDialog:', name);
     name = name.trim();
     // console.log('after trim:', name.length);
@@ -469,19 +476,20 @@ export class SidebarComponent implements OnInit {
       return;
     }
 
-    // console.log('length passed:', name.length);
+    console.log('node.path:', node.path);
 
     // call mkdir API
     this.fileService.createFolderAPI(name).subscribe((res: any) => {
       //   console.log('api mkdir res:', res);
       if (res.success) {
-        this.refreshTree();
+        // this.refreshTree();
+        this.collapseParentFolder(`${node.path}/${node.name}`);
       }
     });
   }
 
   /** table file create*/
-  createTableFileFromDialog(name: string) {
+  createTableFileFromDialog(name: string, node: FsNode) {
     // console.log('Files From Dialog -- name :', name);
 
     name = name.trim();
@@ -498,13 +506,14 @@ export class SidebarComponent implements OnInit {
     this.fileService.createTableFileAPI(name).subscribe((res: any) => {
       //   console.log('api mktbl res:', res);
       if (res.success) {
-        this.refreshTree();
+        // this.refreshTree();
+        this.collapseParentFolder(`${node.path}/${node.name}`);
       }
     });
   }
 
   /** sop file create*/
-  createSopFileFromDialog(name: string) {
+  createSopFileFromDialog(name: string, node: FsNode) {
     // console.log('Files From Dialog -- name :', name);
 
     name = name.trim();
@@ -521,7 +530,8 @@ export class SidebarComponent implements OnInit {
     this.fileService.createSopFileAPI(name).subscribe((res: any) => {
       //   console.log('api mkspf res:', res);
       if (res.success) {
-        this.refreshTree();
+        // this.refreshTree();
+        this.collapseParentFolder(`${node.path}/${node.name}`);
       }
     });
   }
