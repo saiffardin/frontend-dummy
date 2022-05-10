@@ -337,9 +337,6 @@ export class SidebarComponent implements OnInit {
         console.log('node:', node);
         // console.log('parentPath:', parentPath);
 
-        this.collapseParentFolder(parentPath);
-
-        /*
         this.fileService.cdPathAPI(parentPath).subscribe((data: any) => {
           //   console.log('cdPathAPI:', data);
 
@@ -350,7 +347,6 @@ export class SidebarComponent implements OnInit {
 
           this.dialog.open(this.confirmDeleteRefHtml, { data: node });
         });
-        */
 
         break;
 
@@ -560,14 +556,16 @@ export class SidebarComponent implements OnInit {
   }
 
   onConfirmDelete(node: any) {
-    // console.log('onConfirmDelete:', node);
+    console.log('onConfirmDelete:', node.path);
 
     this.fileService.removeAPI(node).subscribe((data: any) => {
-      //   console.log('response from remove API:', data);
+      console.log('response from remove API:', data);
+      console.log('%csaif path', 'color:red', node.path);
 
       if (data.success) {
         //   refresh
-        this.refreshTree();
+        this.collapseParentFolder(node.path);
+        // this.refreshTree();
       }
     });
   }
