@@ -6,7 +6,7 @@
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle class="treeNodes" (click)="clickedFiles(node)"
         title="{{node.path}}/{{node.name}}" (contextmenu)="onRightClick($event, {folder: false, node})">
         <!-- Files -->
-        <span>{{node.name}}</span>
+        <span class="prevent-select">{{node.name}}</span>
     </mat-tree-node>
 
     <!-- This is the tree node template for expandable nodes -->
@@ -23,7 +23,7 @@
             <!-- ************************************************************************************************* -->
 
             <!-- Folder Name -->
-            <span>{{node.name}}</span>
+            <span class="prevent-select">{{node.name}}</span>
         </div>
         <!-- There is inline padding applied to this div using styles.
             This padding value depends on the mat-icon-button width.  -->

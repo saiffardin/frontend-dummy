@@ -57,3 +57,9 @@
 .treeNodes:active {
     background-color: rgba(211, 211, 211, 0.39);
 }
+
+.prevent-select {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
