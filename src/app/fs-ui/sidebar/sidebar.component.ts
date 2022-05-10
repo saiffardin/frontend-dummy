@@ -127,6 +127,8 @@ export class SidebarComponent implements OnInit {
   @Input() TabObjInSidebar!: any;
   @ViewChild('dialogRefHtml') dialogRefHtml!: TemplateRef<any>;
   @ViewChild('confirmDeleteRefHtml') confirmDeleteRefHtml!: TemplateRef<any>;
+  // rc - reference to the MatMenuTrigger in the DOM
+  @ViewChild(MatMenuTrigger, { static: true }) matMenuTrigger!: MatMenuTrigger;
 
   constructor(
     private fileService: FsUiService,
@@ -147,9 +149,6 @@ export class SidebarComponent implements OnInit {
 
   //   dialogData
   dialogData: DialogData = { type: '' };
-
-  // rc - reference to the MatMenuTrigger in the DOM
-  @ViewChild(MatMenuTrigger, { static: true }) matMenuTrigger!: MatMenuTrigger;
 
   //  mat-tree
   hasChild = (_: number, node: FsNode) =>
@@ -466,72 +465,104 @@ export class SidebarComponent implements OnInit {
    * to make an api call (with proper parameters) to create a folder.
    * @param name denotes the 'name' that user wants to create the folder
    */
-  createFolderFromDialog(name: string, node: FsNode) {
-    // console.log('createFolderFromDialog:', name);
-    name = name.trim();
-    // console.log('after trim:', name.length);
+  //   createFolderFromDialog(name: string, node: FsNode) {
+  //     // console.log('createFolderFromDialog:', name);
+  //     name = name.trim();
+  //     // console.log('after trim:', name.length);
 
-    if (name.length === 0) {
-      this._snackBar.open('Every folder must have a name.', 'STOP');
-      return;
-    }
+  //     if (name.length === 0) {
+  //       this._snackBar.open('Every folder must have a name.', 'STOP');
+  //       return;
+  //     }
 
-    console.log('node.path:', node.path);
+  //     console.log('node.path:', node.path);
 
-    // call mkdir API
-    this.fileService.createFolderAPI(name).subscribe((res: any) => {
-      //   console.log('api mkdir res:', res);
-      if (res.success) {
-        // this.refreshTree();
-        this.collapseParentFolder(`${node.path}/${node.name}`);
-      }
-    });
-  }
+  //     // call mkdir API
+  //     this.fileService.createFolderAPI(name).subscribe((res: any) => {
+  //       //   console.log('api mkdir res:', res);
+  //       if (res.success) {
+  //         // this.refreshTree();
+  //         this.collapseParentFolder(`${node.path}/${node.name}`);
+  //       }
+  //     });
+  //   }
 
   /** table file create*/
-  createTableFileFromDialog(name: string, node: FsNode) {
-    // console.log('Files From Dialog -- name :', name);
+  //   createTableFileFromDialog(name: string, node: FsNode) {
+  //     // console.log('Files From Dialog -- name :', name);
 
-    name = name.trim();
-    // console.log('after trim:', name.length);
+  //     name = name.trim();
+  //     // console.log('after trim:', name.length);
 
-    if (name.length === 0) {
-      this._snackBar.open('Every file must have a name.', 'STOP');
-      return;
-    }
+  //     if (name.length === 0) {
+  //       this._snackBar.open('Every file must have a name.', 'STOP');
+  //       return;
+  //     }
 
-    // console.log('length passed:', name.length);
+  //     // console.log('length passed:', name.length);
 
-    // call mktbl API
-    this.fileService.createTableFileAPI(name).subscribe((res: any) => {
-      //   console.log('api mktbl res:', res);
-      if (res.success) {
-        // this.refreshTree();
-        this.collapseParentFolder(`${node.path}/${node.name}`);
-      }
-    });
-  }
+  //     // call mktbl API
+  //     this.fileService.createTableFileAPI(name).subscribe((res: any) => {
+  //       //   console.log('api mktbl res:', res);
+  //       if (res.success) {
+  //         // this.refreshTree();
+  //         this.collapseParentFolder(`${node.path}/${node.name}`);
+  //       }
+  //     });
+  //   }
 
   /** sop file create*/
-  createSopFileFromDialog(name: string, node: FsNode) {
-    // console.log('Files From Dialog -- name :', name);
+  //   createSopFileFromDialog(name: string, node: FsNode) {
+  //     // console.log('Files From Dialog -- name :', name);
 
+  //     name = name.trim();
+  //     // console.log('after trim:', name.length);
+
+  //     if (name.length === 0) {
+  //       this._snackBar.open('Every file must have a name.', 'STOP');
+  //       return;
+  //     }
+
+  //     // console.log('length passed:', name.length);
+
+  //     // call mktbl API
+  //     this.fileService.createSopFileAPI(name).subscribe((res: any) => {
+  //       //   console.log('api mkspf res:', res);
+  //       if (res.success) {
+  //         // this.refreshTree();
+  //         this.collapseParentFolder(`${node.path}/${node.name}`);
+  //       }
+  //     });
+  //   }
+
+  createFilesAndFolders(obj: { name: string; type: string; node: FsNode }) {
+    let { name, type, node } = obj;
+    let api!: any;
+
+    console.log(`${type} -- ${name}`);
     name = name.trim();
-    // console.log('after trim:', name.length);
+    console.log('after trim:', name.length);
 
     if (name.length === 0) {
-      this._snackBar.open('Every file must have a name.', 'STOP');
+      this._snackBar.open(
+        `Every ${type.toLowerCase()} must have a name.`,
+        'STOP'
+      );
       return;
     }
 
-    // console.log('length passed:', name.length);
+    if (type === 'Folder')
+      api = (name: string) => this.fileService.createFolderAPI(name);
+    else if (type === 'SOP File')
+      api = (name: string) => this.fileService.createSopFileAPI(name);
+    else if (type === 'Table File')
+      api = (name: string) => this.fileService.createTableFileAPI(name);
 
-    // call mktbl API
-    this.fileService.createSopFileAPI(name).subscribe((res: any) => {
-      //   console.log('api mkspf res:', res);
+    api(name).subscribe((res: any) => {
       if (res.success) {
-        // this.refreshTree();
         this.collapseParentFolder(`${node.path}/${node.name}`);
+      } else {
+        throw new Error(res);
       }
     });
   }
