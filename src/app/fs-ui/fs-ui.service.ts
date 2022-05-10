@@ -215,4 +215,29 @@ export class FsUiService {
     return this.http.post<any>(url, reqBody, httpOptions);
     // return new Observable((subscriber) => subscriber.complete());
   }
+
+  // cmd: mkdir + mktbl + mkspf
+  createFilesAndFoldersAPI(obj: {
+    name: string;
+    cmd: string;
+  }): Observable<FsNode> | any {
+    const url = `http://192.168.100.37:8080/fs`;
+    const { name, cmd } = obj;
+
+    const reqBody = {
+      command: cmd,
+      arguments: name,
+    };
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    let httpOptions = {
+      headers: headers,
+    };
+
+    return this.http.post<any>(url, reqBody, httpOptions);
+    // return new Observable((subscriber) => subscriber.complete());
+  }
 }

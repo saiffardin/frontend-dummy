@@ -275,6 +275,25 @@ export class SidebarComponent implements OnInit {
     // we pass to the menu the information about our object
     this.matMenuTrigger.menuData = { item: item };
 
+    // change to that directory
+    const { folder, node } = item;
+    console.log('node path:', node.path);
+    console.log('folder', folder);
+
+    if (folder) {
+      /**
+       * node.path 'false' means the folder is root
+       * node.path 'true' means the folder is not root
+       */
+      let changeDirTo!: string;
+      if (node.path) changeDirTo = `${node.path}/${node.name}`;
+      else changeDirTo = `./`;
+
+      this.fileService.cdPathAPI(changeDirTo).subscribe((data: any) => {
+        console.log(data);
+      });
+    }
+
     // we open the menu
     this.matMenuTrigger.openMenu();
   }
@@ -460,10 +479,10 @@ export class SidebarComponent implements OnInit {
     console.log('closeDialog');
   }
 
-
   createFilesAndFolders(obj: { name: string; type: string; node: FsNode }) {
     let { name, type, node } = obj;
-    let api!: any;
+    // let api!: any;
+    let cmd!: string;
 
     console.log(`${type} -- ${name}`);
     name = name.trim();
@@ -477,12 +496,17 @@ export class SidebarComponent implements OnInit {
       return;
     }
 
+    // 8888888888888888888888888888888888888888888888888888888888
+    /*
     if (type === 'Folder')
-      api = (name: string) => this.fileService.createFolderAPI(name);
+      api = (name: string) =>
+        this.fileService.createFilesAndFoldersAPI({ name, cmd: 'mkdir' });
     else if (type === 'SOP File')
-      api = (name: string) => this.fileService.createSopFileAPI(name);
+      api = (name: string) =>
+        this.fileService.createFilesAndFoldersAPI({ name, cmd: 'mkspf' });
     else if (type === 'Table File')
-      api = (name: string) => this.fileService.createTableFileAPI(name);
+      api = (name: string) =>
+        this.fileService.createFilesAndFoldersAPI({ name, cmd: 'mktbl' });
 
     api(name).subscribe((res: any) => {
       if (res.success) {
@@ -491,6 +515,23 @@ export class SidebarComponent implements OnInit {
         throw new Error(res);
       }
     });
+    */
+
+    // ---------------
+
+    if (type === 'Folder') cmd = 'mkdir';
+    else if (type === 'SOP File') cmd = 'mkspf';
+    else if (type === 'Table File') cmd = 'mktbl';
+
+    this.fileService
+      .createFilesAndFoldersAPI({ name, cmd })
+      .subscribe((res: any) => {
+        if (res.success) {
+          this.collapseParentFolder(`${node.path}/${node.name}`);
+        } else {
+          throw new Error(res);
+        }
+      });
   }
 
   onDismissDelete() {
