@@ -15,8 +15,6 @@ export class FsUiService {
 
     // console.log('fs service || param path in cd:', path);
 
-    // path = path === 'root' ? './' : path;
-
     const reqBody = {
       command: 'cd',
       arguments: path,
@@ -53,7 +51,6 @@ export class FsUiService {
     return this.http.post<any>(url, reqBody, httpOptions);
   }
 
-
   // cmd: rm (remove)
   removeAPI(node: FsNode): Observable<FsNode> | any {
     const url = `http://192.168.100.37:8080/fs`;
@@ -81,7 +78,6 @@ export class FsUiService {
     // return new Observable((subscriber) => subscriber.complete());
   }
 
- 
   // cmd: mkdir + mktbl + mkspf
   createFilesAndFoldersAPI(obj: {
     name: string;
