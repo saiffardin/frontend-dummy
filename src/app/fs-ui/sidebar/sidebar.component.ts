@@ -168,9 +168,9 @@ export class SidebarComponent implements OnInit {
 
     let childrenArray = data.map((child: any) => {
       // these are missing in 'child'
-      //   path;
-      //   children;
-      //   isFolder?: boolean;
+      // path;
+      // children;
+      // isFolder?: boolean;
 
       let path: string = `${node.path}/${node.name}`;
 
@@ -182,12 +182,6 @@ export class SidebarComponent implements OnInit {
       if (path[0] === '/') {
         path = path.substring(1);
       }
-
-      //   console.log('------------------');
-      //   console.log('child:', child);
-      //   console.log('%cafter path:', 'color:blue', path);
-      //   console.log('children:', children);
-      //   console.log('isFolder:', isFolder);
 
       return {
         ...child,
@@ -242,8 +236,6 @@ export class SidebarComponent implements OnInit {
           node,
           data: res.data,
         });
-
-        // console.log('======================');
 
         // the following 3 lines were done to render tree upon data change
         const data = this.dataSource.data;
@@ -331,38 +323,23 @@ export class SidebarComponent implements OnInit {
   handleSwitchCase(command: string, node: FsNode) {
     switch (command) {
       case 'mkdir':
-        // console.log('switch mkdir cmd ===', node.name);
-
         this.openDialogToCreate({ type: 'Folder', node, command });
         break;
 
       case 'mktbl':
-        // console.log('switch mktbl cmd ===', node.name);
-
         this.openDialogToCreate({ type: 'Table File', node, command });
         break;
 
       case 'mkspf':
-        // console.log('switch mkspf cmd ===', node.name);
         this.openDialogToCreate({ type: 'SOP File', node, command });
         break;
 
       case 'rm':
-        // console.log('switch rm cmd');
-
-        // let parentPath: string = node.path!;
         let parentPath: string = node.path === 'root' ? './' : node.path!;
-        console.log('node:', node);
-        // console.log('parentPath:', parentPath);
+        // console.log('node:', node);
 
         this.fileService.cdPathAPI(parentPath).subscribe((data: any) => {
           //   console.log('cdPathAPI:', data);
-
-          //   console.log(`id - ${node.id}`);
-          //   console.log(`clicked - ${node.name}`);
-
-          //   console.log('dataSource:', this.dataSource.data);
-
           this.dialog.open(this.confirmDeleteRefHtml, { data: node });
         });
 
@@ -452,25 +429,12 @@ export class SidebarComponent implements OnInit {
     command: string;
   }): void {
     const { type, node, command } = obj;
-    // console.log('%csaif type:', 'color:red', type);
-    // console.log('%csaif node:', 'color:red', node);
-    // console.log('%csaif command:', 'color:red', command);
 
     let path = node.name === 'root' ? './' : `${node.path}/${node.name}`;
 
-    // console.log('================');
-    // console.log('folderPath:', path);
-    // console.log('clicked upon:', node.name);
-    // console.log('================');
-
     this.fileService.cdPathAPI(path).subscribe((res: any) => {
-      //   console.log('cd mkdir', res);
-
       this.dialogData.type = type;
       this.dialogData.name = node.name;
-
-      // in future we can also pass 'command' to do more refactoring
-
       this.dialog.open(this.dialogRefHtml, { data: node });
     });
   }
@@ -481,13 +445,10 @@ export class SidebarComponent implements OnInit {
 
   createFilesAndFolders(obj: { name: string; type: string; node: FsNode }) {
     let { name, type, node } = obj;
-    // let api!: any;
     let cmd!: string;
 
-    console.log(`${type} -- ${name}`);
+    // console.log(`${type} -- ${name}`);
     name = name.trim();
-    console.log('after trim:', name.length);
-
     if (name.length === 0) {
       this._snackBar.open(
         `Every ${type.toLowerCase()} must have a name.`,
@@ -495,29 +456,6 @@ export class SidebarComponent implements OnInit {
       );
       return;
     }
-
-    // 8888888888888888888888888888888888888888888888888888888888
-    /*
-    if (type === 'Folder')
-      api = (name: string) =>
-        this.fileService.createFilesAndFoldersAPI({ name, cmd: 'mkdir' });
-    else if (type === 'SOP File')
-      api = (name: string) =>
-        this.fileService.createFilesAndFoldersAPI({ name, cmd: 'mkspf' });
-    else if (type === 'Table File')
-      api = (name: string) =>
-        this.fileService.createFilesAndFoldersAPI({ name, cmd: 'mktbl' });
-
-    api(name).subscribe((res: any) => {
-      if (res.success) {
-        this.collapseParentFolder(`${node.path}/${node.name}`);
-      } else {
-        throw new Error(res);
-      }
-    });
-    */
-
-    // ---------------
 
     if (type === 'Folder') cmd = 'mkdir';
     else if (type === 'SOP File') cmd = 'mkspf';
@@ -531,7 +469,7 @@ export class SidebarComponent implements OnInit {
         } else {
           throw new Error(res);
         }
-      });
+      }, this.commonErrorHandler);
   }
 
   onDismissDelete() {
@@ -539,18 +477,16 @@ export class SidebarComponent implements OnInit {
     this._snackBar.open('Delete operation is cancelled', 'OK');
   }
 
+  /** this method is called when user is "sure" that he will delete record */
   onConfirmDelete(node: any) {
-    console.log('onConfirmDelete:', node.path);
-
     this.fileService.removeAPI(node).subscribe((data: any) => {
-      console.log('response from remove API:', data);
-      console.log('%csaif path', 'color:red', node.path);
+      //   console.log('response from remove API:', data);
 
       if (data.success) {
         //   refresh
         this.collapseParentFolder(node.path);
         // this.refreshTree();
       }
-    });
+    }, this.commonErrorHandler);
   }
 }
