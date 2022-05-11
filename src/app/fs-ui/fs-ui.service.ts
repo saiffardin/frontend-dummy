@@ -53,66 +53,6 @@ export class FsUiService {
     return this.http.post<any>(url, reqBody, httpOptions);
   }
 
-  // cmd: pwd
-  cmdPwdApi(): Observable<FsNode> | any {
-    const url = `http://192.168.100.37:8080/fs`;
-
-    const reqBody = {
-      command: 'pwd',
-      arguments: '',
-    };
-
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    let httpOptions = {
-      headers: headers,
-    };
-
-    return this.http.post<any>(url, reqBody, httpOptions);
-  }
-
-  // cmd: entbl
-  cmdEnterTableApi(node: FsNode): Observable<FsNode> | any {
-    const url = `http://192.168.100.37:8080/fs`;
-    // console.log('entbl node:', node.name);
-
-    const reqBody = {
-      command: 'entbl',
-      arguments: `${node.name}`,
-    };
-
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    let httpOptions = {
-      headers: headers,
-    };
-
-    return this.http.post<any>(url, reqBody, httpOptions);
-  }
-
-  // cmd: describe
-  cmdDescribeApi(): Observable<FsNode> | any {
-    const url = `http://192.168.100.37:8080/fs`;
-
-    const reqBody = {
-      command: 'describe',
-      arguments: '',
-    };
-
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    let httpOptions = {
-      headers: headers,
-    };
-
-    return this.http.post<any>(url, reqBody, httpOptions);
-  }
 
   // cmd: rm (remove)
   removeAPI(node: FsNode): Observable<FsNode> | any {
@@ -141,81 +81,7 @@ export class FsUiService {
     // return new Observable((subscriber) => subscriber.complete());
   }
 
-  // cmd: mkdir
-  createFolderAPI(folderName: string): Observable<FsNode> | any {
-    const url = `http://192.168.100.37:8080/fs`;
-
-    // console.log('folderName:', folderName);
-
-    // console.log('-------------------- fs service - mkdir');
-
-    const reqBody = {
-      command: 'mkdir',
-      arguments: folderName,
-    };
-
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    let httpOptions = {
-      headers: headers,
-    };
-
-    return this.http.post<any>(url, reqBody, httpOptions);
-    // return new Observable((subscriber) => subscriber.complete());
-  }
-
-  // cmd: mktbl
-  createTableFileAPI(fileName: string): Observable<FsNode> | any {
-    const url = `http://192.168.100.37:8080/fs`;
-
-    // console.log('fileName:', fileName);
-
-    // console.log('-------------------- fs service - mktbl');
-
-    const reqBody = {
-      command: 'mktbl',
-      arguments: fileName,
-    };
-
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    let httpOptions = {
-      headers: headers,
-    };
-
-    return this.http.post<any>(url, reqBody, httpOptions);
-    // return new Observable((subscriber) => subscriber.complete());
-  }
-
-  // cmd: mkspf
-  createSopFileAPI(fileName: string): Observable<FsNode> | any {
-    const url = `http://192.168.100.37:8080/fs`;
-
-    // console.log('fileName:', fileName);
-
-    // console.log('-------------------- fs service - mkspf');
-
-    const reqBody = {
-      command: 'mkspf',
-      arguments: fileName,
-    };
-
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    let httpOptions = {
-      headers: headers,
-    };
-
-    return this.http.post<any>(url, reqBody, httpOptions);
-    // return new Observable((subscriber) => subscriber.complete());
-  }
-
+ 
   // cmd: mkdir + mktbl + mkspf
   createFilesAndFoldersAPI(obj: {
     name: string;

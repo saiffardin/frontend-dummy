@@ -315,7 +315,7 @@ export class SidebarComponent implements OnInit {
     // addTab({ node, tabs, selected, tabContent: result.data });
 
     // run cd
-    // then enter table => use 'cmdEnterTableApi()'
+    // then enter table => using API
   }
 
   /**
