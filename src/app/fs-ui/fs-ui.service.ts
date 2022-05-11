@@ -27,6 +27,19 @@ export class FsUiService {
     };
 
     return this.superAPI(reqBody);
+  }
+
+  // cmd: rm (remove)
+  removeAPI(node: FsNode): Observable<FsNode> | any {
+    const { children, extension, isFolder, name, path } = node;
+
+    const reqBody = {
+      command: 'rm',
+      arguments: name,
+    };
+
+    return this.superAPI(reqBody);
+
     /*
     const url = `http://192.168.100.37:8080/fs`;
 
@@ -39,30 +52,8 @@ export class FsUiService {
     };
 
     return this.http.post<any>(url, reqBody, httpOptions);
-    */
-  }
-
-  // cmd: rm (remove)
-  removeAPI(node: FsNode): Observable<FsNode> | any {
-    const { children, extension, isFolder, name, path } = node;
-
-    const reqBody = {
-      command: 'rm',
-      arguments: name,
-    };
-
-    const url = `http://192.168.100.37:8080/fs`;
-
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    let httpOptions = {
-      headers: headers,
-    };
-
-    return this.http.post<any>(url, reqBody, httpOptions);
     // return new Observable((subscriber) => subscriber.complete());
+    */
   }
 
   // cmd: mkdir + mktbl + mkspf
