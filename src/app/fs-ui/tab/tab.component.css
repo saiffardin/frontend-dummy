@@ -17,7 +17,6 @@
     color: red;
 }
 
-#betweenTitleAndIcon {
+.tabTitle {
     padding-right: 50px;
-
 }
