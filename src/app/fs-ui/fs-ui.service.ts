@@ -54,23 +54,9 @@ export class FsUiService {
     };
 
     return this.superAPI(reqBody);
-
-    /*
-    const url = `http://192.168.100.37:8080/fs`;
-
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    let httpOptions = {
-      headers: headers,
-    };
-
-    return this.http.post<any>(url, reqBody, httpOptions);
-    // return new Observable((subscriber) => subscriber.complete());
-    */
   }
 
+  /** superAPI() contains the codes which is common across all the apis */
   private superAPI(reqBody: any) {
     const url = `http://192.168.100.37:8080/fs`;
 
