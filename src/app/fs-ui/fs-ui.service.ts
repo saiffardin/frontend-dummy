@@ -39,6 +39,21 @@ export class FsUiService {
     };
 
     return this.superAPI(reqBody);
+  }
+
+  // cmd: mkdir + mktbl + mkspf
+  createFilesAndFoldersAPI(obj: {
+    name: string;
+    cmd: string;
+  }): Observable<FsNode> | any {
+    const { name, cmd } = obj;
+
+    const reqBody = {
+      command: cmd,
+      arguments: name,
+    };
+
+    return this.superAPI(reqBody);
 
     /*
     const url = `http://192.168.100.37:8080/fs`;
@@ -54,32 +69,6 @@ export class FsUiService {
     return this.http.post<any>(url, reqBody, httpOptions);
     // return new Observable((subscriber) => subscriber.complete());
     */
-  }
-
-  // cmd: mkdir + mktbl + mkspf
-  createFilesAndFoldersAPI(obj: {
-    name: string;
-    cmd: string;
-  }): Observable<FsNode> | any {
-    const { name, cmd } = obj;
-
-    const reqBody = {
-      command: cmd,
-      arguments: name,
-    };
-
-    const url = `http://192.168.100.37:8080/fs`;
-
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    let httpOptions = {
-      headers: headers,
-    };
-
-    return this.http.post<any>(url, reqBody, httpOptions);
-    // return new Observable((subscriber) => subscriber.complete());
   }
 
   private superAPI(reqBody: any) {
