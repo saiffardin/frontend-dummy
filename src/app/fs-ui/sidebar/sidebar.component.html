@@ -6,6 +6,9 @@
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle class="treeNodes" (click)="clickedFiles(node)"
         title="{{node.path}}/{{node.name}}" (contextmenu)="onRightClick($event, {folder: false, node})">
         <!-- Files -->
+        <mat-icon *ngIf="node.extension==='.spf'" class="folder-files-icon">all_out</mat-icon>
+        <mat-icon *ngIf="node.extension==='.tbl'" class="folder-files-icon">assignment</mat-icon>
+
         <span class="prevent-select">{{node.name}}</span>
     </mat-tree-node>
 
@@ -23,6 +26,8 @@
             <!-- ************************************************************************************************* -->
 
             <!-- Folder Name -->
+            <!-- folder_open -->
+            <mat-icon class="folder-files-icon">folder</mat-icon>
             <span class="prevent-select">{{node.name}}</span>
         </div>
         <!-- There is inline padding applied to this div using styles.

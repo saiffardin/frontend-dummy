@@ -36,6 +36,10 @@
 	outline: inherit;
 }
 
+.folder-files-icon{
+ width: 30px;   
+}
+
 .mat-tree-node{
     /* border: 1px solid black; */
     padding-right: 10px ;
