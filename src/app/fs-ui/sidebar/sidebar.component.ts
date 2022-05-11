@@ -130,11 +130,11 @@ export class SidebarComponent implements OnInit {
     // console.log('%cafter path:', 'color:red', path);
 
     this.fileService.cdPathAPI(path).subscribe((data: any) => {
-      //   console.log('cd - data:', data);
+      console.log('cd:', data);
 
       this.fileService.cmdListApi().subscribe((res: any) => {
-        console.log('ls - res:', res);
-        // console.log(res.data);
+        console.log('ls:', res);
+        console.log('%c--------------------', 'color:blue;font-weight: bold');
 
         node.children = this.buildChildrenArrayFromResponse({
           node,

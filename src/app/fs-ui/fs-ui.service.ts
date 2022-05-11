@@ -11,14 +11,14 @@ export class FsUiService {
 
   // cmd: cd (path)
   cdPathAPI(path: string): Observable<FsNode> | any {
-    const url = `http://192.168.100.37:8080/fs`;
-
-    // console.log('fs service || param path in cd:', path);
-
     const reqBody = {
       command: 'cd',
       arguments: path,
     };
+
+    return this.superAPI(reqBody);
+    /*
+    const url = `http://192.168.100.37:8080/fs`;
 
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -29,16 +29,17 @@ export class FsUiService {
     };
 
     return this.http.post<any>(url, reqBody, httpOptions);
+    */
   }
 
   // cmd: ls
   cmdListApi(): Observable<FsNode> | any {
-    const url = `http://192.168.100.37:8080/fs`;
-
     const reqBody = {
       command: 'ls',
       arguments: '',
     };
+
+    const url = `http://192.168.100.37:8080/fs`;
 
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -53,18 +54,14 @@ export class FsUiService {
 
   // cmd: rm (remove)
   removeAPI(node: FsNode): Observable<FsNode> | any {
-    const url = `http://192.168.100.37:8080/fs`;
-
-    // console.log('node:', node);
-
     const { children, extension, isFolder, name, path } = node;
-
-    // console.log('-------------------- fs service - rm');
 
     const reqBody = {
       command: 'rm',
       arguments: name,
     };
+
+    const url = `http://192.168.100.37:8080/fs`;
 
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -83,13 +80,14 @@ export class FsUiService {
     name: string;
     cmd: string;
   }): Observable<FsNode> | any {
-    const url = `http://192.168.100.37:8080/fs`;
     const { name, cmd } = obj;
 
     const reqBody = {
       command: cmd,
       arguments: name,
     };
+
+    const url = `http://192.168.100.37:8080/fs`;
 
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -101,5 +99,19 @@ export class FsUiService {
 
     return this.http.post<any>(url, reqBody, httpOptions);
     // return new Observable((subscriber) => subscriber.complete());
+  }
+
+  private superAPI(reqBody: any) {
+    const url = `http://192.168.100.37:8080/fs`;
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    let httpOptions = {
+      headers: headers,
+    };
+
+    return this.http.post<any>(url, reqBody, httpOptions);
   }
 }
