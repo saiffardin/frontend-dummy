@@ -25,99 +25,6 @@ let TREE_DATA: FsNode[] = [
   },
 ];
 
-// test tree
-/*
-let TREE_DATA: FsNode[] = [
-  {
-    name: 'root',
-    children: [
-      {
-        name: 'ACL',
-        children: [
-          {
-            name: 't1.tbl',
-            children: [],
-            path: 'root/ACL/t1.tbl',
-            isFolder: false,
-            extension: '.tbl',
-          },
-
-          {
-            name: 't2.tbl',
-            children: [],
-            path: 'root/ACL/t2.tbl',
-            isFolder: false,
-            extension: '.tbl',
-          },
-
-          {
-            name: 't3.tbl',
-            children: [],
-            path: 'root/ACL/t3.tbl',
-            isFolder: false,
-            extension: '.tbl',
-          },
-
-          {
-            name: 't4.tbl',
-            children: [],
-            path: 'root/ACL/t4.tbl',
-            isFolder: false,
-            extension: '.tbl',
-          },
-        ],
-        path: 'root/ACL',
-        isFolder: true,
-        extension: '.dir',
-      },
-
-      {
-        name: 'Accounts',
-        children: [
-          {
-            name: 'acc1',
-            children: [
-              {
-                name: 't7.tbl',
-                children: [],
-                path: 'root/Accounts/acc1/t7.tbl',
-                isFolder: false,
-                extension: '.tbl',
-              },
-            ],
-            path: 'root/Accounts/acc1',
-            isFolder: true,
-            extension: '.dir',
-          },
-
-          {
-            name: 't5.tbl',
-            children: [],
-            path: 'root/Accounts/t5.tbl',
-            isFolder: false,
-            extension: '.tbl',
-          },
-
-          {
-            name: 't6.tbl',
-            children: [],
-            path: 'root/Accounts/t6.tbl',
-            isFolder: false,
-            extension: '.tbl',
-          },
-        ],
-        path: 'root/Accounts',
-        isFolder: true,
-        extension: '.dir',
-      },
-    ],
-    path: '',
-    isFolder: true,
-    extension: '.dir',
-  },
-];
-*/
-
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -200,9 +107,6 @@ export class SidebarComponent implements OnInit {
    * @param node is the tree-node thats been clicked
    */
   showChildren(e: any, node: FsNode) {
-    // console.log('treeControl:', this.treeControl.isExpanded(node));
-    // console.log('node size:', node?.children?.length);
-
     /**
      * no api call for closing the tree
      */
@@ -443,6 +347,7 @@ export class SidebarComponent implements OnInit {
     console.log('closeDialog');
   }
 
+  /** to create folders, sop file and table files */
   createFilesAndFolders(obj: { name: string; type: string; node: FsNode }) {
     let { name, type, node } = obj;
     let cmd!: string;
