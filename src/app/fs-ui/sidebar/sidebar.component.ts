@@ -122,7 +122,7 @@ export class SidebarComponent implements OnInit {
    * the user clicks the 'left-side-icon' of any folder on the sidebar
    * @param node is the tree-node thats been clicked
    */
-  showChildren(node: FsNode) {
+  showChildren(node: FsNode, fromHTML: boolean = true) {
     /**
      * no api call for closing the tree
      */
@@ -132,10 +132,14 @@ export class SidebarComponent implements OnInit {
      * when it's reopened
      * after closing the tree once
      */
+    console.log('fromHTML - ', fromHTML);
     if (
-      !this.treeControl.isExpanded(node) ||
-      (!!node.children && node.children.length > 0)
+      fromHTML &&
+      (!this.treeControl.isExpanded(node) ||
+        (!!node.children && node.children.length > 0))
     ) {
+      console.log('returned from showChildren');
+
       return;
     }
 
@@ -288,8 +292,10 @@ export class SidebarComponent implements OnInit {
 
     // if the folder is 'root'
     if (pathArr[0] === '') {
-      this.treeControl.collapse(node);
-      node.children = [];
+        // this.treeControl.collapse(node);
+        // node.children = [];
+      this.showChildren(node, false);
+
       return;
     }
 
@@ -304,8 +310,9 @@ export class SidebarComponent implements OnInit {
 
     // console.log('this.dataSource.data[0]:', this.dataSource.data[0]);
 
-    this.treeControl.collapse(node);
-    node.children = [];
+    // this.treeControl.collapse(node);
+    // node.children = [];
+    this.showChildren(node, false);
   }
 
   /**
