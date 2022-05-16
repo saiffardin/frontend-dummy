@@ -122,7 +122,7 @@ export class SidebarComponent implements OnInit {
    * the user clicks the 'left-side-icon' of any folder on the sidebar
    * @param node is the tree-node thats been clicked
    */
-  showChildren(e: any, node: FsNode) {
+  showChildren(node: FsNode) {
     /**
      * no api call for closing the tree
      */
