@@ -22,6 +22,7 @@ let TREE_DATA: FsNode[] = [
     path: '',
     isFolder: true,
     extension: '.dir',
+    isFolderOpen: false,
   },
 ];
 
@@ -56,6 +57,9 @@ export class SidebarComponent implements OnInit {
 
   //   dialogData
   dialogData: DialogData = { type: '' };
+
+  // already expanded nodes
+  expandedNodes: any[] = [];
 
   //  mat-tree
   hasChild = (_: number, node: FsNode) =>
@@ -99,6 +103,7 @@ export class SidebarComponent implements OnInit {
 
       let children: FsNode[] = [];
       let isFolder: boolean = child.extension === '.dir' ? true : false;
+      let isFolderOpen = false;
 
       //   console.log('%cbefore path:', 'color:blue', path);
 
@@ -111,6 +116,7 @@ export class SidebarComponent implements OnInit {
         path,
         children,
         isFolder,
+        isFolderOpen,
       };
     });
 
@@ -132,16 +138,40 @@ export class SidebarComponent implements OnInit {
      * when it's reopened
      * after closing the tree once
      */
-    console.log('fromHTML - ', fromHTML);
+
+    if (
+      this.treeControl.isExpanded(node) &&
+      !this.expandedNodes.includes(node.name)
+    ) {
+      //   console.log('open');
+      this.expandedNodes.push(node.name);
+    } else if (
+      !this.treeControl.isExpanded(node) &&
+      this.expandedNodes.includes(node.name)
+    ) {
+      console.log('close');
+      node.isFolderOpen = false;
+      node.children = [];
+      this.expandedNodes = this.expandedNodes.filter(
+        (expNode) => expNode !== node.name
+      );
+    }
+
     if (
       fromHTML &&
       (!this.treeControl.isExpanded(node) ||
         (!!node.children && node.children.length > 0))
     ) {
       console.log('returned from showChildren');
-
       return;
     }
+
+    /*
+    if (fromHTML && !this.treeControl.isExpanded(node)) {
+      console.log('returned from showChildren');
+      return;
+    }
+    */
 
     let { name, path, children, isFolder, extension } = node;
 
@@ -153,22 +183,73 @@ export class SidebarComponent implements OnInit {
       console.log('cd:', data);
 
       this.fileService.cmdListApi().subscribe((res: any) => {
-        console.log('ls:', res);
-        console.log('%c--------------------', 'color:blue;font-weight: bold');
+        // console.log('ls:', res);
+        // console.log('%c--------------------', 'color:blue;font-weight: bold');
 
         node.children = this.buildChildrenArrayFromResponse({
           node,
           data: res.data,
         });
 
+        node.isFolderOpen = true;
+
         // the following 3 lines were done to render tree upon data change
         const data = this.dataSource.data;
         this.dataSource.data = null!;
         this.dataSource.data = data;
 
-        console.log('this.dataSource:', this.dataSource.data);
+        // if (!fromHTML){
+        //     this.nodeRecursion(this.dataSource.data[0]);
+        // }
+
+        // console.log('this.dataSource:', this.dataSource.data);
       }, this.commonErrorHandler);
     }, this.commonErrorHandler);
+  }
+
+  viewExpandedNodes() {
+    console.log('this.expandedNodes', this.expandedNodes);
+    this.treeControl.collapseAll();
+
+    // this.nodeRecursion(this.dataSource.data[0]);
+
+    setTimeout(() => this.nodeRecursion(this.dataSource.data[0]), 3000);
+  }
+
+  nodeRecursion(node: FsNode): any {
+    if (node.isFolderOpen) {
+      this.treeControl.expand(node);
+    }
+    console.log(
+      `%c ${node.name} - `,
+      'color:blue',
+      `children : ${node.children?.length} -- \n`,
+      `folder open - ${node.isFolderOpen}`,
+      '\n==========================================='
+    );
+    console.log();
+    if (node.children?.length === 0) {
+      console.log(`%c '${node.name}' has no dir open`, 'color:red');
+      console.log('----------------------------------------');
+      //   return node;
+    } else {
+      node.children?.forEach((child) => {
+        if (child.isFolder) {
+          console.log(`'${child.name}' is a child of '${node.name}'`);
+          this.nodeRecursion(child);
+        }
+        // return this.nodeRecursion(child);
+      });
+    }
+  }
+
+  visitChildren(node: FsNode) {
+    let nodeChildren = node.children;
+    let childrenLength = nodeChildren?.length;
+
+    node.children?.forEach((child) => {
+      console.log('%c child - ', 'color:blue', child);
+    });
   }
 
   /**
@@ -279,40 +360,48 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  collapseParentFolder(path: any) {
-    console.log('collapseParentFolder : ', path);
-    // console.log('this.dataSource.data[0]:', this.dataSource.data[0]);
-
+  getNodeFromPath(path: string) {
     let pathArr: any[] = path.split('/');
     let node: FsNode = this.dataSource.data[0];
     let nodeChildren: FsNode[];
 
     console.log('pathArr:', pathArr);
-    console.log('node:', node);
+    // console.log('node:', node);
 
     // if the folder is 'root'
     if (pathArr[0] === '') {
-        // this.treeControl.collapse(node);
-        // node.children = [];
+      // this.treeControl.collapse(node);
+      // node.children = [];
+      console.log('saif root - ', node);
       this.showChildren(node, false);
 
-      return;
+      return node;
     }
 
-    pathArr.forEach((path) => {
+    pathArr.forEach(async (path) => {
       if (path !== 'root') {
         // console.log('path:', path);
         nodeChildren = node.children!;
         node = nodeChildren.find((n) => n.name === path)!;
-        console.log('first - ', node);
+
+        // this.showChildren(node, false);
+
+        // console.log('first - ', node);
       }
     });
 
-    // console.log('this.dataSource.data[0]:', this.dataSource.data[0]);
-
     // this.treeControl.collapse(node);
     // node.children = [];
+    // this.showChildren(node, false);
+    return node;
+  }
+
+  collapseParentFolder(path: any) {
+    let node = this.getNodeFromPath(path);
     this.showChildren(node, false);
+
+    // this.nodeRecursion(this.dataSource.data[0]);
+    // setTimeout(() => this.nodeRecursion(this.dataSource.data[0]), 3000);
   }
 
   /**

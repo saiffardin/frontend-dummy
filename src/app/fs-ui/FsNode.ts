@@ -8,4 +8,5 @@ export interface FsNode {
   children?: FsNode[];
   isFolder?: boolean;
   extension?: string;
+  isFolderOpen?: boolean;
 }
