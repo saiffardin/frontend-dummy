@@ -98,6 +98,7 @@ export class SidebarComponent implements OnInit {
       // path;
       // children;
       // isFolder?: boolean;
+      // isFolderOpen?: boolean;
 
       let path: string = `${node.path}/${node.name}`;
 
@@ -454,16 +455,89 @@ export class SidebarComponent implements OnInit {
     console.log('closeDialog');
   }
 
-  updateView(node: FsNode) {
-    // this function will update the view
-    // in case of creating a dir,sop,tbl
-    //      will receive node
-    //
-    // in case of deletion
-    //      we will get the parent folder of that node
-    //      parent folder thike node a jawar rasta ber kora lage
+  updateView(
+    parentNode: FsNode,
+    action: string,
+    currNodeName: string,
+    currNodeExt: string
+  ) {
+    let { name, path, children, isFolder, extension } = parentNode;
 
-    console.log('updateView:', node);
+    path = name === 'root' ? './' : `${path}/${name}`;
+    console.log('path parent:', path);
+
+    console.log('updateView children:', parentNode.children);
+
+    // /*
+    this.fileService.cdPathAPI(path).subscribe((data: any) => {
+      //   console.log('cd:', data);
+
+      this.fileService.cmdListApi().subscribe((res: any) => {
+        console.log('ls:', res.data);
+        console.log('%c--------------------', 'color:blue;font-weight: bold');
+
+        if (action === 'create') {
+          const fullCurrNodeName =
+            currNodeExt === '.dir' ? currNodeName : currNodeName + currNodeExt;
+
+          console.log('currNodeName:', currNodeName);
+          console.log('currNodeExt:', currNodeExt);
+          console.log('full file name:', fullCurrNodeName);
+
+          const NewNodeDB = res.data.find(
+            (child: FsNode) => child.name === fullCurrNodeName
+          );
+
+          console.log('---NewNodeDB--- :', NewNodeDB);
+
+          const newNodeUI = {
+            ...NewNodeDB,
+            path,
+            children: [],
+            isFolder: currNodeExt === '.dir' ? true : false,
+            extension: currNodeExt,
+            isFolderOpen: false,
+          };
+
+          console.log('---newNodeUI--- :', newNodeUI);
+
+          parentNode.children?.push(newNodeUI);
+          console.log('this.dataSource:', this.dataSource.data[0]);
+
+          const data = this.dataSource.data;
+          this.dataSource.data = null!;
+          this.dataSource.data = data;
+        } else if (action === 'delete') {
+          console.log('currNodeName:', currNodeName);
+          console.log('currNodeExt:', currNodeExt);
+
+          parentNode.children = parentNode.children?.filter(
+            (child) => child.name !== currNodeName
+          );
+
+          const data = this.dataSource.data;
+          this.dataSource.data = null!;
+          this.dataSource.data = data;
+        }
+        /*
+        node.children = this.buildChildrenArrayFromResponse({
+          node,
+          data: res.data,
+        });
+
+        node.isFolderOpen = true;
+        */
+        // the following 3 lines were done to render tree upon data change
+        /*
+        const data = this.dataSource.data;
+        this.dataSource.data = null!;
+        this.dataSource.data = data;
+        */
+        // console.log('this.dataSource:', this.dataSource.data);
+      }, this.commonErrorHandler);
+    }, this.commonErrorHandler);
+
+    // */
   }
 
   /** to create folders, sop file and table files */
@@ -493,25 +567,21 @@ export class SidebarComponent implements OnInit {
       ext = '.tbl';
     }
 
-    console.log(`createFilesAndFolders -- ${cmd} -- ${name}`);
-    console.log('createFilesAndFolders -- parentNode: ', node);
+    // console.log(`createFilesAndFolders -- ${cmd} -- ${name}`);
+    // console.log('createFilesAndFolders -- parentNode: ', node);
 
     this.fileService
       .createFilesAndFoldersAPI({ name, cmd })
       .subscribe((res: any) => {
         if (res.success) {
-          console.log('create res:', res);
-          let parentNode = node;
-          let childNode = {
-            name: name,
-            path: `${node.path}/${node.name}`,
-            children: [],
-            isFolder: cmd === 'mkdir' ? true : false,
-            extension: ext,
-            isFolderOpen: false,
-          };
-          this.collapseParentFolder(`${node.path}/${node.name}`);
-          console.log('createFilesAndFolders -- childeNode: ', childNode);
+          console.log('create res success:', res);
+
+          this.updateView(node, 'create', name, ext);
+
+          //   let parentNode = node;
+          //
+          //   this.collapseParentFolder(`${node.path}/${node.name}`);
+          //   console.log('createFilesAndFolders -- childeNode: ', childNode);
         } else {
           throw new Error(res);
         }
@@ -529,16 +599,24 @@ export class SidebarComponent implements OnInit {
       //   console.log('response from remove API:', data);
 
       if (data.success) {
+        console.log('deletion succeed:', data);
         let parentNode = this.getNodeFromPath(node.path);
-        //   refresh
-        this.collapseParentFolder(node.path);
-        console.log('onConfirmDelete: current:', node);
 
+        console.log('deletion current:', node);
+        console.log('deletion parent:', parentNode);
+        this.updateView(parentNode, 'delete', node.name, node.extension);
+
+        // -----------------------------------------
+        //   refresh
+        // this.collapseParentFolder(node.path);
+
+        /*
+        console.log('onConfirmDelete: current:', node);
         parentNode.children = parentNode.children?.filter(
           (child) => child.name !== node.name
         );
-
         console.log('onConfirmDelete: ', 'parent:', parentNode);
+        */
 
         // this.refreshTree();
       }
