@@ -397,8 +397,8 @@ export class SidebarComponent implements OnInit {
   }
 
   collapseParentFolder(path: any) {
-    let node = this.getNodeFromPath(path);
-    this.showChildren(node, false);
+    // let node = this.getNodeFromPath(path);
+    // this.showChildren(node, false);
 
     // this.nodeRecursion(this.dataSource.data[0]);
     // setTimeout(() => this.nodeRecursion(this.dataSource.data[0]), 3000);
