@@ -143,7 +143,8 @@ export class SidebarComponent implements OnInit {
       this.treeControl.isExpanded(node) &&
       !this.expandedNodes.includes(node.name)
     ) {
-      //   console.log('open');
+      console.log('open');
+      console.log('isExpanded:', this.treeControl.isExpanded(node));
       this.expandedNodes.push(node.name);
     } else if (
       !this.treeControl.isExpanded(node) &&
@@ -151,7 +152,8 @@ export class SidebarComponent implements OnInit {
     ) {
       console.log('close');
       node.isFolderOpen = false;
-      node.children = [];
+      //   uncomment the line below, to rerender node's child every time the node is expanded
+      //   node.children = [];
       this.expandedNodes = this.expandedNodes.filter(
         (expNode) => expNode !== node.name
       );
@@ -397,10 +399,12 @@ export class SidebarComponent implements OnInit {
   }
 
   collapseParentFolder(path: any) {
-    // let node = this.getNodeFromPath(path);
+    let node = this.getNodeFromPath(path);
     // this.showChildren(node, false);
-
     // this.nodeRecursion(this.dataSource.data[0]);
+
+    console.log('collapse:', node);
+
     // setTimeout(() => this.nodeRecursion(this.dataSource.data[0]), 3000);
   }
 
