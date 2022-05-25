@@ -482,6 +482,8 @@ export class SidebarComponent implements OnInit {
     else if (type === 'SOP File') cmd = 'mkspf';
     else if (type === 'Table File') cmd = 'mktbl';
 
+    console.log(`createFilesAndFolders -- ${cmd} -- ${name}`);
+
     this.fileService
       .createFilesAndFoldersAPI({ name, cmd })
       .subscribe((res: any) => {
