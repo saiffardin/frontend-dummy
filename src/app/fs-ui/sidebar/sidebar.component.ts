@@ -143,14 +143,14 @@ export class SidebarComponent implements OnInit {
       this.treeControl.isExpanded(node) &&
       !this.expandedNodes.includes(node.name)
     ) {
-      console.log('open');
-      console.log('isExpanded:', this.treeControl.isExpanded(node));
+      //   console.log('open');
+      //   console.log('isExpanded:', this.treeControl.isExpanded(node));
       this.expandedNodes.push(node.name);
     } else if (
       !this.treeControl.isExpanded(node) &&
       this.expandedNodes.includes(node.name)
     ) {
-      console.log('close');
+      //   console.log('close');
       node.isFolderOpen = false;
       //   uncomment the line below, to rerender node's child every time the node is expanded
       //   node.children = [];
@@ -276,8 +276,8 @@ export class SidebarComponent implements OnInit {
 
     // change to that directory
     const { folder, node } = item;
-    console.log('node path:', node.path);
-    console.log('folder', folder);
+    // console.log('node path:', node.path);
+    // console.log('folder', folder);
 
     if (folder) {
       /**
@@ -367,16 +367,11 @@ export class SidebarComponent implements OnInit {
     let node: FsNode = this.dataSource.data[0];
     let nodeChildren: FsNode[];
 
-    console.log('pathArr:', pathArr);
+    // console.log('pathArr:', pathArr);
     // console.log('node:', node);
 
     // if the folder is 'root'
     if (pathArr[0] === '') {
-      // this.treeControl.collapse(node);
-      // node.children = [];
-      console.log('saif root - ', node);
-      this.showChildren(node, false);
-
       return node;
     }
 
@@ -385,10 +380,6 @@ export class SidebarComponent implements OnInit {
         // console.log('path:', path);
         nodeChildren = node.children!;
         node = nodeChildren.find((n) => n.name === path)!;
-
-        // this.showChildren(node, false);
-
-        // console.log('first - ', node);
       }
     });
 
@@ -399,11 +390,11 @@ export class SidebarComponent implements OnInit {
   }
 
   collapseParentFolder(path: any) {
-    let node = this.getNodeFromPath(path);
+    // let node = this.getNodeFromPath(path);
     // this.showChildren(node, false);
     // this.nodeRecursion(this.dataSource.data[0]);
 
-    console.log('collapse:', node);
+    console.log('collapse');
 
     // setTimeout(() => this.nodeRecursion(this.dataSource.data[0]), 3000);
   }
@@ -463,10 +454,23 @@ export class SidebarComponent implements OnInit {
     console.log('closeDialog');
   }
 
+  updateView(node: FsNode) {
+    // this function will update the view
+    // in case of creating a dir,sop,tbl
+    //      will receive node
+    //
+    // in case of deletion
+    //      we will get the parent folder of that node
+    //      parent folder thike node a jawar rasta ber kora lage
+
+    console.log('updateView:', node);
+  }
+
   /** to create folders, sop file and table files */
   createFilesAndFolders(obj: { name: string; type: string; node: FsNode }) {
     let { name, type, node } = obj;
     let cmd!: string;
+    let ext!: string;
 
     // console.log(`${type} -- ${name}`);
     name = name.trim();
@@ -478,17 +482,36 @@ export class SidebarComponent implements OnInit {
       return;
     }
 
-    if (type === 'Folder') cmd = 'mkdir';
-    else if (type === 'SOP File') cmd = 'mkspf';
-    else if (type === 'Table File') cmd = 'mktbl';
+    if (type === 'Folder') {
+      cmd = 'mkdir';
+      ext = '.dir';
+    } else if (type === 'SOP File') {
+      cmd = 'mkspf';
+      ext = '.spf';
+    } else if (type === 'Table File') {
+      cmd = 'mktbl';
+      ext = '.tbl';
+    }
 
     console.log(`createFilesAndFolders -- ${cmd} -- ${name}`);
+    console.log('createFilesAndFolders -- parentNode: ', node);
 
     this.fileService
       .createFilesAndFoldersAPI({ name, cmd })
       .subscribe((res: any) => {
         if (res.success) {
+          console.log('create res:', res);
+          let parentNode = node;
+          let childNode = {
+            name: name,
+            path: `${node.path}/${node.name}`,
+            children: [],
+            isFolder: cmd === 'mkdir' ? true : false,
+            extension: ext,
+            isFolderOpen: false,
+          };
           this.collapseParentFolder(`${node.path}/${node.name}`);
+          console.log('createFilesAndFolders -- childeNode: ', childNode);
         } else {
           throw new Error(res);
         }
@@ -506,8 +529,17 @@ export class SidebarComponent implements OnInit {
       //   console.log('response from remove API:', data);
 
       if (data.success) {
+        let parentNode = this.getNodeFromPath(node.path);
         //   refresh
         this.collapseParentFolder(node.path);
+        console.log('onConfirmDelete: current:', node);
+
+        parentNode.children = parentNode.children?.filter(
+          (child) => child.name !== node.name
+        );
+
+        console.log('onConfirmDelete: ', 'parent:', parentNode);
+
         // this.refreshTree();
       }
     }, this.commonErrorHandler);
