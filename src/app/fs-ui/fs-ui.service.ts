@@ -58,7 +58,7 @@ export class FsUiService {
 
   /** superAPI() contains the codes which is common across all the apis */
   private superAPI(reqBody: any) {
-    const url = `http://192.168.100.37:8080/fs`;
+    const url = `http://192.168.103.65:8080/fs`;
 
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
