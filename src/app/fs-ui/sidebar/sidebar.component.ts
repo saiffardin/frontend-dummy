@@ -140,6 +140,8 @@ export class SidebarComponent implements OnInit {
      * after closing the tree once
      */
 
+    console.log('bug:', node);
+
     if (
       this.treeControl.isExpanded(node) &&
       !this.expandedNodes.includes(node.name)
@@ -466,7 +468,7 @@ export class SidebarComponent implements OnInit {
     path = name === 'root' ? './' : `${path}/${name}`;
     console.log('path parent:', path);
 
-    console.log('updateView children:', parentNode.children);
+    console.log('updateView parentNode:', parentNode);
 
     // /*
     this.fileService.cdPathAPI(path).subscribe((data: any) => {
@@ -492,7 +494,7 @@ export class SidebarComponent implements OnInit {
 
           const newNodeUI = {
             ...NewNodeDB,
-            path,
+            path: path === './' ? 'root' : path,
             children: [],
             isFolder: currNodeExt === '.dir' ? true : false,
             extension: currNodeExt,
