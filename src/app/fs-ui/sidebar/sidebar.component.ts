@@ -140,8 +140,6 @@ export class SidebarComponent implements OnInit {
      * after closing the tree once
      */
 
-    console.log('bug:', node);
-
     if (
       this.treeControl.isExpanded(node) &&
       !this.expandedNodes.includes(node.name)
@@ -466,7 +464,7 @@ export class SidebarComponent implements OnInit {
     let { name, path, children, isFolder, extension } = parentNode;
 
     path = name === 'root' ? './' : `${path}/${name}`;
-    console.log('path parent:', path);
+    // console.log('path parent:', path);
 
     console.log('updateView parentNode:', parentNode);
 
@@ -475,22 +473,22 @@ export class SidebarComponent implements OnInit {
       //   console.log('cd:', data);
 
       this.fileService.cmdListApi().subscribe((res: any) => {
-        console.log('ls:', res.data);
+        // console.log('ls:', res.data);
         console.log('%c--------------------', 'color:blue;font-weight: bold');
 
         if (action === 'create') {
           const fullCurrNodeName =
             currNodeExt === '.dir' ? currNodeName : currNodeName + currNodeExt;
 
-          console.log('currNodeName:', currNodeName);
-          console.log('currNodeExt:', currNodeExt);
-          console.log('full file name:', fullCurrNodeName);
+        //   console.log('currNodeName:', currNodeName);
+        //   console.log('currNodeExt:', currNodeExt);
+        //   console.log('full file name:', fullCurrNodeName);
 
           const NewNodeDB = res.data.find(
             (child: FsNode) => child.name === fullCurrNodeName
           );
 
-          console.log('---NewNodeDB--- :', NewNodeDB);
+        //   console.log('---NewNodeDB--- :', NewNodeDB);
 
           const newNodeUI = {
             ...NewNodeDB,
@@ -504,14 +502,14 @@ export class SidebarComponent implements OnInit {
           console.log('---newNodeUI--- :', newNodeUI);
 
           parentNode.children?.push(newNodeUI);
-          console.log('this.dataSource:', this.dataSource.data[0]);
+        //   console.log('this.dataSource:', this.dataSource.data[0]);
 
           const data = this.dataSource.data;
           this.dataSource.data = null!;
           this.dataSource.data = data;
         } else if (action === 'delete') {
-          console.log('currNodeName:', currNodeName);
-          console.log('currNodeExt:', currNodeExt);
+        //   console.log('currNodeName:', currNodeName);
+        //   console.log('currNodeExt:', currNodeExt);
 
           parentNode.children = parentNode.children?.filter(
             (child) => child.name !== currNodeName
