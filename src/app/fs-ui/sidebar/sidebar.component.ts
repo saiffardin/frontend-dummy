@@ -38,16 +38,6 @@ export class SidebarComponent implements OnInit {
   // rc - reference to the MatMenuTrigger in the DOM
   @ViewChild(MatMenuTrigger, { static: true }) matMenuTrigger!: MatMenuTrigger;
 
-  constructor(
-    private fileService: FsUiService,
-    private _snackBar: MatSnackBar,
-    public dialog: MatDialog
-  ) {
-    this.dataSource.data = TREE_DATA;
-  }
-
-  ngOnInit(): void {}
-
   // these objects are created for mat-tree
   treeControl = new NestedTreeControl<FsNode>((node) => node.children);
   dataSource = new MatTreeNestedDataSource<FsNode>();
@@ -60,6 +50,16 @@ export class SidebarComponent implements OnInit {
 
   // already expanded nodes
   expandedNodes: any[] = [];
+
+  constructor(
+    private fileService: FsUiService,
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog
+  ) {
+    this.dataSource.data = TREE_DATA;
+  }
+
+  ngOnInit(): void {}
 
   //  mat-tree
   hasChild = (_: number, node: FsNode) =>
@@ -169,13 +169,6 @@ export class SidebarComponent implements OnInit {
       return;
     }
 
-    /*
-    if (fromHTML && !this.treeControl.isExpanded(node)) {
-      console.log('returned from showChildren');
-      return;
-    }
-    */
-
     let { name, path, children, isFolder, extension } = node;
 
     path = name === 'root' ? './' : `${path}/${name}`;
@@ -201,24 +194,12 @@ export class SidebarComponent implements OnInit {
         this.dataSource.data = null!;
         this.dataSource.data = data;
 
-        // if (!fromHTML){
-        //     this.nodeRecursion(this.dataSource.data[0]);
-        // }
-
         // console.log('this.dataSource:', this.dataSource.data);
       }, this.commonErrorHandler);
     }, this.commonErrorHandler);
   }
 
-  viewExpandedNodes() {
-    console.log('this.expandedNodes', this.expandedNodes);
-    this.treeControl.collapseAll();
-
-    // this.nodeRecursion(this.dataSource.data[0]);
-
-    setTimeout(() => this.nodeRecursion(this.dataSource.data[0]), 3000);
-  }
-
+  /** Not using this recursive function anymore*/
   nodeRecursion(node: FsNode): any {
     if (node.isFolderOpen) {
       this.treeControl.expand(node);
@@ -241,18 +222,8 @@ export class SidebarComponent implements OnInit {
           console.log(`'${child.name}' is a child of '${node.name}'`);
           this.nodeRecursion(child);
         }
-        // return this.nodeRecursion(child);
       });
     }
-  }
-
-  visitChildren(node: FsNode) {
-    let nodeChildren = node.children;
-    let childrenLength = nodeChildren?.length;
-
-    node.children?.forEach((child) => {
-      console.log('%c child - ', 'color:blue', child);
-    });
   }
 
   /**
@@ -390,16 +361,6 @@ export class SidebarComponent implements OnInit {
     return node;
   }
 
-  collapseParentFolder(path: any) {
-    // let node = this.getNodeFromPath(path);
-    // this.showChildren(node, false);
-    // this.nodeRecursion(this.dataSource.data[0]);
-
-    console.log('collapse');
-
-    // setTimeout(() => this.nodeRecursion(this.dataSource.data[0]), 3000);
-  }
-
   /**
    * 'clickedFiles' method is called to
    * open a sidebar 'file' to the right-side panel.
@@ -480,15 +441,15 @@ export class SidebarComponent implements OnInit {
           const fullCurrNodeName =
             currNodeExt === '.dir' ? currNodeName : currNodeName + currNodeExt;
 
-        //   console.log('currNodeName:', currNodeName);
-        //   console.log('currNodeExt:', currNodeExt);
-        //   console.log('full file name:', fullCurrNodeName);
+          //   console.log('currNodeName:', currNodeName);
+          //   console.log('currNodeExt:', currNodeExt);
+          //   console.log('full file name:', fullCurrNodeName);
 
           const NewNodeDB = res.data.find(
             (child: FsNode) => child.name === fullCurrNodeName
           );
 
-        //   console.log('---NewNodeDB--- :', NewNodeDB);
+          //   console.log('---NewNodeDB--- :', NewNodeDB);
 
           const newNodeUI = {
             ...NewNodeDB,
@@ -502,14 +463,14 @@ export class SidebarComponent implements OnInit {
           console.log('---newNodeUI--- :', newNodeUI);
 
           parentNode.children?.push(newNodeUI);
-        //   console.log('this.dataSource:', this.dataSource.data[0]);
+          //   console.log('this.dataSource:', this.dataSource.data[0]);
 
           const data = this.dataSource.data;
           this.dataSource.data = null!;
           this.dataSource.data = data;
         } else if (action === 'delete') {
-        //   console.log('currNodeName:', currNodeName);
-        //   console.log('currNodeExt:', currNodeExt);
+          //   console.log('currNodeName:', currNodeName);
+          //   console.log('currNodeExt:', currNodeExt);
 
           parentNode.children = parentNode.children?.filter(
             (child) => child.name !== currNodeName
@@ -519,20 +480,7 @@ export class SidebarComponent implements OnInit {
           this.dataSource.data = null!;
           this.dataSource.data = data;
         }
-        /*
-        node.children = this.buildChildrenArrayFromResponse({
-          node,
-          data: res.data,
-        });
 
-        node.isFolderOpen = true;
-        */
-        // the following 3 lines were done to render tree upon data change
-        /*
-        const data = this.dataSource.data;
-        this.dataSource.data = null!;
-        this.dataSource.data = data;
-        */
         // console.log('this.dataSource:', this.dataSource.data);
       }, this.commonErrorHandler);
     }, this.commonErrorHandler);
@@ -577,11 +525,6 @@ export class SidebarComponent implements OnInit {
           console.log('create res success:', res);
 
           this.updateView(node, 'create', name, ext);
-
-          //   let parentNode = node;
-          //
-          //   this.collapseParentFolder(`${node.path}/${node.name}`);
-          //   console.log('createFilesAndFolders -- childeNode: ', childNode);
         } else {
           throw new Error(res);
         }
@@ -605,20 +548,6 @@ export class SidebarComponent implements OnInit {
         console.log('deletion current:', node);
         console.log('deletion parent:', parentNode);
         this.updateView(parentNode, 'delete', node.name, node.extension);
-
-        // -----------------------------------------
-        //   refresh
-        // this.collapseParentFolder(node.path);
-
-        /*
-        console.log('onConfirmDelete: current:', node);
-        parentNode.children = parentNode.children?.filter(
-          (child) => child.name !== node.name
-        );
-        console.log('onConfirmDelete: ', 'parent:', parentNode);
-        */
-
-        // this.refreshTree();
       }
     }, this.commonErrorHandler);
   }
