@@ -75,16 +75,12 @@ export class SidebarComponent implements OnInit {
    * when user tries to create a folder/file
    * that already exists in that same directory
    */
-  duplicateNameHandler = (err: any) => {
-    const errorMsg: string = err.error.message.split(':');
-    if (errorMsg[0] === '[FOLDER CREATE FAILED]') {
-      console.log(errorMsg);
-      this._snackBar.open(`${errorMsg[2]}`, `${errorMsg[0]}`);
-      return;
-    }
+  duplicateNameHandler = (res: any) => {
+    const errorMsg: string = res.message.split(':');
 
-    console.log('Error in "createFilesAndFoldersAPI" Subscribe:', err.error);
-    console.error(err.error.message);
+    console.log(errorMsg);
+    this._snackBar.open(`${errorMsg[2]}`, `${errorMsg[0]}`);
+    return;
   };
 
   //  helper function -- called from 'showChildren' method
@@ -526,9 +522,10 @@ export class SidebarComponent implements OnInit {
 
           this.updateView(node, 'create', name, ext);
         } else {
-          throw new Error(res);
+          console.log('create FAILED:', res);
+          this.duplicateNameHandler(res);
         }
-      }, this.duplicateNameHandler);
+      });
   }
 
   onDismissDelete() {
