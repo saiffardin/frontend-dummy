@@ -522,8 +522,10 @@ export class SidebarComponent implements OnInit {
 
           this.updateView(node, 'create', name, ext);
         } else {
-          console.log('create FAILED:', res);
-          this.duplicateNameHandler(res);
+          console.log('creation FAILED:', res);
+          this._snackBar.open(res.message, res.status);
+
+          //   this.duplicateNameHandler(res);
         }
       });
   }
